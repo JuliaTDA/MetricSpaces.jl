@@ -1,1 +1,1 @@
-Sitemap: https://vituri.github.io/MetricSpaces.jl/sitemap.xml
+Sitemap: https://juliatda.github.io/MetricSpaces.jl/sitemap.xml
