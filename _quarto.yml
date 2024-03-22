@@ -1,0 +1,35 @@
+project:
+  type: book
+  preview: 
+    port: 4200
+    browser: true
+
+execute:
+  freeze: auto  # re-render only when source changes
+  cache: true
+
+book:
+  title: "Test"
+  reader-mode: true
+  # subtitle: "With examples in Julia"
+  site-url: https://vituri.github.io/TDA_with_julia/
+  repo-url: https://github.com/vituri/TDA_with_julia
+  author: "G. Vituri"
+  date: "2023-09-01"
+  # sharing: [twitter, linkedin]
+  downloads: [pdf, epub]
+
+  chapters:
+    - index.qmd
+
+format:
+  html:
+    theme: cosmo
+    # css: style.css
+    code-link: true
+    page-layout: full
+    max-width: 90vw
+    preview-links: true
+    
+  pdf:
+    documentclass: scrreprt
