@@ -12,8 +12,8 @@ book:
   title: "Test"
   reader-mode: true
   # subtitle: "With examples in Julia"
-  site-url: https://vituri.github.io/TDA_with_julia/
-  repo-url: https://github.com/vituri/TDA_with_julia
+  site-url: https://juliatda.github.io/MetricSpaces.jl/
+  repo-url: https://github.com/juliatda/MetricSpaces.jl
   author: "G. Vituri"
   date: "2023-09-01"
   # sharing: [twitter, linkedin]
@@ -31,5 +31,5 @@ format:
     max-width: 90vw
     preview-links: true
     
-  pdf:
-    documentclass: scrreprt
+  # pdf:
+  #   documentclass: scrreprt
