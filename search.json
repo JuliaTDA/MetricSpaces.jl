@@ -14,7 +14,7 @@
     "href": "index.html#test",
     "title": "MetricSpaces.jl",
     "section": "1.1 Test",
-    "text": "1.1 Test\n\n1+1\n\n2",
+    "text": "1.1 Test\n\n1+1\n\n2\n\n\n\nBigInt(2)^99\n\n633825300114114700748351602688",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>MetricSpaces.jl</span>"
     ]
