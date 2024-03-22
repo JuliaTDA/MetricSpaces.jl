@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Test",
+    "title": "MetricSpaces.jl",
     "section": "",
     "text": "1 MetricSpaces.jl",
     "crumbs": [
@@ -12,9 +12,9 @@
   {
     "objectID": "index.html#test",
     "href": "index.html#test",
-    "title": "Test",
+    "title": "MetricSpaces.jl",
     "section": "1.1 Test",
-    "text": "1.1 Test",
+    "text": "1.1 Test\n\n1+1\n\n2",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>MetricSpaces.jl</span>"
     ]
