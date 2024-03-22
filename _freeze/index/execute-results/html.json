@@ -1,0 +1,12 @@
+{
+  "hash": "1bb27b1cf6f0aff8ec260c703ab93acc",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "# MetricSpaces.jl\n\n## Test\n\n::: {#fe09442e .cell execution_count=1}\n``` {.julia .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-display execution_count=2}\n```\n2\n```\n:::\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

@@ -9,7 +9,7 @@ execute:
   cache: true
 
 book:
-  title: "MetricSpaces.jl"
+  title: MetricSpaces.jl
   reader-mode: true
   # subtitle: "With examples in Julia"
   site-url: https://juliatda.github.io/MetricSpaces.jl/
@@ -21,7 +21,6 @@ book:
 
   chapters:
     - index.qmd
-    - 
 
 format:
   html:
