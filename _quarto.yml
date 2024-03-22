@@ -9,18 +9,19 @@ execute:
   cache: true
 
 book:
-  title: "Test"
+  title: "MetricSpaces.jl"
   reader-mode: true
   # subtitle: "With examples in Julia"
   site-url: https://juliatda.github.io/MetricSpaces.jl/
   repo-url: https://github.com/juliatda/MetricSpaces.jl
   author: "G. Vituri"
-  date: "2023-09-01"
+  date: "2024-03-22"
   # sharing: [twitter, linkedin]
   downloads: [pdf, epub]
 
   chapters:
     - index.qmd
+    - 
 
 format:
   html:
@@ -31,5 +32,8 @@ format:
     max-width: 90vw
     preview-links: true
     
+jupyter: julia-1.10  
+
+
   # pdf:
   #   documentclass: scrreprt
