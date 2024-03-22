@@ -4,9 +4,19 @@
     "href": "index.html",
     "title": "Test",
     "section": "",
-    "text": "1 teste!",
+    "text": "1 MetricSpaces.jl",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>teste!</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>MetricSpaces.jl</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#test",
+    "href": "index.html#test",
+    "title": "Test",
+    "section": "1.1 Test",
+    "text": "1.1 Test",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>MetricSpaces.jl</span>"
     ]
   }
 ]
