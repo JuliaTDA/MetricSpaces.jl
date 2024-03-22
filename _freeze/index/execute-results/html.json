@@ -2,7 +2,7 @@
   "hash": "013fa7da5ca3f7af4a2baae5d4e860d3",
   "result": {
     "engine": "jupyter",
-    "markdown": "# MetricSpaces.jl\n\n## Test\n\n::: {#883d6074 .cell execution_count=1}\n``` {.julia .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-display execution_count=2}\n```\n2\n```\n:::\n:::\n\n\n::: {#4941c4b1 .cell execution_count=2}\n``` {.julia .cell-code}\nBigInt(2)^99\n```\n\n::: {.cell-output .cell-output-display execution_count=3}\n```\n633825300114114700748351602688\n```\n:::\n:::\n\n\n",
+    "markdown": "# MetricSpaces.jl\n\n## Test\n\n::: {#883d6074 .cell execution_count=2}\n``` {.julia .cell-code}\n1+1\n```\n\n::: {.cell-output .cell-output-display execution_count=2}\n```\n2\n```\n:::\n:::\n\n\n::: {#4941c4b1 .cell execution_count=3}\n``` {.julia .cell-code}\nBigInt(2)^99\n```\n\n::: {.cell-output .cell-output-display execution_count=3}\n```\n633825300114114700748351602688\n```\n:::\n:::\n\n\n",
     "supporting": [
       "index_files"
     ],

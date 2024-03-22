@@ -1,4 +1,4 @@
 /.quarto/
 /_book/
 /.jupyter_cache/
-/_freeze/
+# /_freeze/
