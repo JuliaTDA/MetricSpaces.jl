@@ -110,3 +110,5 @@ pairwise_distance(M, M, d_sq)
 @time pairwise_distance_summary(N, N, d, maximum)
 
 distance_to_measure(M, M, d, k = 10, summary_function = mean)
+
+# sampling 

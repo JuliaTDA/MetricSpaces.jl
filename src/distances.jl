@@ -13,7 +13,7 @@ x_i to y_j.
 Parallel details
 """
 function pairwise_distance(
-    M::S, N::S, d::Function
+    M::S, N::S, d
     ) where {S <: MetricSpace{T} where {T}}
     s = zeros(length(M), length(N))
 
@@ -74,7 +74,7 @@ the `summary_function` to summarise this array to a number.
 By default: the mean.
 """
 function pairwise_distance_summary(
-    M::S, N::S, d::Function, summary_function = mean
+    M::S, N::S, d, summary_function = mean
     ) where {S <: MetricSpace{T} where {T}}
     s = zeros(length(M))
     v = zeros(length(N))
@@ -89,42 +89,3 @@ function pairwise_distance_summary(
     
     return s
 end
-
-function distance_to_measure(
-    M::S, N::S; 
-    d = euclidean
-    ,k::Integer = 5
-    ,summary_function = maximum
-    ) where {S <: MetricSpace{T} where {T}}
-
-    s = zeros(length(M))
-
-    Threads.@threads for (i, x) ∈ collect(enumerate(M))
-        ds = sort(pairwise_distance([x], N, d)[1, :])[1:min(end, k)]
-        s[i] = summary_function(ds)
-    end
-
-    return s    
-end
-
-# function distance_to_measure(
-#     M::MetricSpace, N::MetricSpace = M; 
-#     d = Euclidean()
-#     , k = 5
-#     ,summary_function = mean
-#     )
-#     tree = BallTree(X, metric; reorder = false)
-
-#     n = n_points(p)        
-#     s = zeros(Float64, n)    
-#     n == 0 && return(s)
-
-#     columns = eachcol(p)
-#     @threads for i ∈ 1:n
-#         v = columns[i]
-#         _, d = knn(tree, v, k)
-#         @inbounds s[i] = d |> summary_function
-#     end
-
-#     return s
-# end

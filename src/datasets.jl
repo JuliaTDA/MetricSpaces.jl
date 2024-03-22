@@ -20,7 +20,7 @@ function sphere(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1,
         return y
     end
         
-    return X
+    return EuclideanSpace(X)
 end
 
 """
@@ -46,7 +46,7 @@ function cube(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, n
         return y
     end
         
-    return X
+    return EuclideanSpace(X)
 end
 
 """
@@ -66,5 +66,5 @@ function torus(num_points::Integer = 100; r::Number = 1, R::Number = 3)
     z = @. r * sin(θ)
 
     X = permutedims([x y z], [2, 1])
-    return X    
+    return EuclideanSpace(X) 
 end
