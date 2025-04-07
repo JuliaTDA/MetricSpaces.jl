@@ -85,3 +85,13 @@ function farthest_points_sample(X::MetricSpace, n::Integer; d = euclidean)
 
     return ids
 end
+
+"""
+    random_sample(X::MetricSpace, n = 1000)
+
+Given `X` and an integer `n`, return a subset of `X` with `n` points 
+chosen randomly.
+"""
+function random_sample(X::MetricSpace, n = 1000)
+    shuffle(X)[1:min(length(X), n)]
+end
