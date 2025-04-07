@@ -49,7 +49,8 @@ export
 include("sampling.jl");
 export 
     epsilon_net, 
-    farthest_points_sample;
+    farthest_points_sample, 
+    random_sample;
 
 include("distance functions.jl");
 export 
