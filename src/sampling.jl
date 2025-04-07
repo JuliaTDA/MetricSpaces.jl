@@ -1,3 +1,5 @@
+using Random
+
 """
     epsilon_net(X, ϵ; d)
 
