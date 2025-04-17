@@ -1,6 +1,2 @@
-using MetricSpaces
+using SafeTestsets
 using Test
-
-@testset "MetricSpaces.jl" begin
-    # Write your tests here.
-end

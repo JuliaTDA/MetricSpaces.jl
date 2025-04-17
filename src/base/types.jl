@@ -2,7 +2,7 @@
 
 # metric spaces
 """ 
-The abstract Metric Space type.
+The abstract Metric Space type is just an alias for Vector{T}.
 """
 MetricSpace{T} = Vector{T} where {T}
 
@@ -16,7 +16,7 @@ function EuclideanSpace(X::Vector{T}) where {T}
     m1, m2 = minimum(sizes), maximum(sizes) 
 
     if m1 != m2
-        throw(error("Variable length of vectors!"))
+        throw(error("All vectors should have the same length."))
     end
 
     X2 = SVector{m1}.(X)
@@ -33,15 +33,17 @@ end
 """
     as_matrix(M::EuclideanSpace)
 
-Convert a euclidean space to a matrix.
+Convert a euclidean space into a matrix.
 """
 as_matrix(X::EuclideanSpace) = stack(X)
 
 """
     Euclidean norm.
 """
-norm(x::Vector{<: Number}) = x.^2 |> sum |> sqrt
-normalize(x::Vector{<: Number}) = x ./ norm(x)
+norm(x) = x.^2 |> sum |> sqrt
+normalize(X::EuclideanSpace) = map(normalize) do x
+    x ./ norm(x)
+end
 
 # covering
 
@@ -55,4 +57,10 @@ SubsetIndex = Vector{<:Integer}
 A covering is interpreted as a vector of subsets of indexes 
 of a given metric space `X`.
 """
-Covering = Vector{<:SubsetIndex}
+CoveringIndices = Vector{<:SubsetIndex}
+
+"""
+A covering is a vector of metric spaces,
+where each metric space is a subset of the original metric space `X`.
+"""
+Covering = Vector{<:MetricSpace}

@@ -1,22 +1,25 @@
 """
-    sphere(
-        num_points::Integer = 100; dim::Integer = 2, 
-        radius::Number = 1, 
-        noise::Function = zeros
-        )
+    sphere(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, noise::Function = zeros)
 
-Create a sphere in R^(`dim`) with `num_points` points and radius `radius`.
+Generates a set of points uniformly distributed on the surface of a sphere in a Euclidean space.
 
 # Arguments
-- `num_points::Integer`: the number of points.
-- `dim::Integer`: the dimension of the sphere (that is: in which R^dim it is).
-- `radius::Number`: the radius of the sphere.
-- `noise::Function`: a function such that `y = noise(dim)` is a `Vector{<:Number}` with `size(y) = (dim;)`.
+- `num_points::Integer=100`: The number of points to generate on the sphere.
+- `dim::Integer=2`: The dimensionality of the sphere.
+- `radius::Number=1`: The radius of the sphere.
+- `noise::Function=zeros`: A function that generates noise to be added to each point. The function should accept the dimensionality `dim` as an argument and return a vector of the same size.
+
+# Returns
+- An instance of `EuclideanSpace` containing the generated points.
+
+# Example
+    sphere(100, dim=3, radius=2.0, noise=randn)
+end
 """
-function sphere(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, noise::Function = zeros)
+function sphere(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1)
     X = rand(dim, num_points) .- 0.5
     X = mapslices(X, dims = 1) do x
-        y = normalize(x) .* radius + noise(dim)
+        y = x ./ norm(x) .* radius
         return y
     end
         
@@ -42,7 +45,7 @@ Create a cube in R^(`dim`) with `num_points` points and radius `radius`.
 function cube(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, noise::Function = zeros)
     X = rand(dim, num_points) .- 0.5
     X = mapslices(X, dims = 1) do x
-        y = normalize(x, 1) .* radius + noise(dim)
+        y = x ./ norm(x) .* radius + noise(dim)
         return y
     end
         

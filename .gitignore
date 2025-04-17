@@ -1,4 +1,6 @@
 /.quarto/
 /_book/
-# /.jupyter_cache/
-# /_freeze/
+/.vitepress/
+/.vscode/
+/.jupyter_cache/
+/_freeze/
