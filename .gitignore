@@ -4,3 +4,4 @@
 /.vscode/
 /.jupyter_cache/
 /_freeze/
+*.cov

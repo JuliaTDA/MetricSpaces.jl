@@ -167,3 +167,12 @@ sampled_points = random_sample(X, 10)
 function random_sample(X::MetricSpace, n = 1000)
     shuffle(X)[1:min(length(X), n)]
 end
+
+@testitem "random_sample" begin
+    X = [1, 2, 3, 4, 5]
+    Y = random_sample(X, 5)
+
+    @test length(random_sample(X, 1)) == 1
+
+    @test isequal(Set(X), Set(Y))
+end
