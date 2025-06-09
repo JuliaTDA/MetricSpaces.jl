@@ -59,7 +59,9 @@ end
 """
     EuclideanSpace(M::Matrix{T}) where {T}
 
-Constructs a `EuclideanSpace` object from a matrix `M` of type `Matrix{T}`. Each column of the matrix `M` is interpreted as a point in the Euclidean space, and the resulting space is constructed from the collection of these points.
+Constructs a `EuclideanSpace` object from a matrix `M` of type `Matrix{T}`. 
+Each column of the matrix `M` is interpreted as a point in the Euclidean space, 
+and the resulting space is constructed from the collection of these points.
 
 # Arguments
 - `M::Matrix{T}`: A matrix where each column represents a point in the Euclidean space.
@@ -69,9 +71,8 @@ Constructs a `EuclideanSpace` object from a matrix `M` of type `Matrix{T}`. Each
 
 # Example
 """
-function EuclideanSpace(M::Matrix{T}) where {T}
-    X = Vector.(eachcol(M))
-    EuclideanSpace(X)
+function EuclideanSpace(M::Matrix{T}) where {T}    
+    EuclideanSpace(Vector.(eachcol(M)))
 end
 
 """
