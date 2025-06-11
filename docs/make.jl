@@ -7,7 +7,7 @@ makedocs(;
     authors="G. Vituri <56522687+vituri@users.noreply.github.com> and contributors",
     format=Documenter.HTML(
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://vituri.github.io/MetricSpaces.jl",
+        canonical="https://juliatda.github.io/MetricSpaces.jl",
         assets=String[],
     ),
     pages=[
@@ -22,14 +22,14 @@ makedocs(;
         "Datasets" => "datasets.md",
         "API Reference" => "api.md",
     ],
-    repo="https://github.com/vituri/MetricSpaces.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/juliatda/MetricSpaces.jl/blob/{commit}{path}#{line}",
     checkdocs=:exports,
 )
 
 # Deploy documentation if running in CI
 if get(ENV, "CI", nothing) == "true"
     deploydocs(;
-        repo="github.com/vituri/MetricSpaces.jl.git",
+        repo="github.com/juliatda/MetricSpaces.jl.git",
         devbranch="main",
         push_preview=true,
     )
