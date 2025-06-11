@@ -1,8 +1,5 @@
 module MetricSpaces
 
-using Revise
-using TestItems
-
 using Distances
 using Base.Threads
 using StatsBase: mean
@@ -10,6 +7,7 @@ using ProgressMeter
 using StaticArrays
 using DataFrames
 using Graphs
+using TestItems
 
 export 
     mean;

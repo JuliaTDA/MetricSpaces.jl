@@ -1,20 +1,68 @@
 # API Reference
 
-## Metric Spaces
-- `MetricSpace`
-- `EuclideanSpace`
-- `as_matrix`
+Complete reference for all exported functions and types in MetricSpaces.jl.
+
+## Core Types
+
+```@docs
+MetricSpace
+EuclideanSpace
+as_matrix
+SubsetIndex
+Covering
+```
 
 ## Distance Functions
-- `pairwise_distance`
-- `pairwise_distance_summary`
 
-## Sampling
-- `epsilon_net`
-- `farthest_points_sample`
-- `random_sample`
+```@docs
+pairwise_distance
+pairwise_distance_summary
+```
 
-## Datasets
-- `sphere`
-- `cube`
-- `torus`
+## Norm Functions
+
+```@docs
+norm
+```
+
+## Ball Operations
+
+```@docs
+ball
+ball_ids
+```
+
+## Neighborhood Analysis
+
+```@docs
+k_neighbors
+distance_to_measure
+excentricity
+```
+
+## Sampling Methods
+
+```@docs
+epsilon_net
+farthest_points_sample
+random_sample
+```
+
+## Dataset Generation
+
+```@docs
+sphere
+torus
+cube
+```
+
+## Nerve Construction
+
+```@docs
+nerve_1d
+```
+
+## Index
+
+```@index
+```
