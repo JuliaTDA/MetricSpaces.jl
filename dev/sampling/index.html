@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Sampling Methods · MetricSpaces.jl</title><meta name="title" content="Sampling Methods · MetricSpaces.jl"/><meta property="og:title" content="Sampling Methods · MetricSpaces.jl"/><meta property="twitter:title" content="Sampling Methods · MetricSpaces.jl"/><meta name="description" content="Documentation for MetricSpaces.jl."/><meta property="og:description" content="Documentation for MetricSpaces.jl."/><meta property="twitter:description" content="Documentation for MetricSpaces.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">MetricSpaces.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../mathematical_background/">Mathematical Background</a></li><li><a class="tocitem" href="../getting_started/">Getting Started</a></li><li><a class="tocitem" href="../types/">Core Types</a></li><li><a class="tocitem" href="../distances/">Distance Functions</a></li><li><a class="tocitem" href="../balls/">Metric Balls</a></li><li class="is-active"><a class="tocitem" href>Sampling Methods</a><ul class="internal"><li><a class="tocitem" href="#ε-net-Sampling"><span>ε-net Sampling</span></a></li><li><a class="tocitem" href="#Farthest-Point-Sampling"><span>Farthest Point Sampling</span></a></li><li><a class="tocitem" href="#Random-Sampling"><span>Random Sampling</span></a></li><li><a class="tocitem" href="#Comparing-Sampling-Methods"><span>Comparing Sampling Methods</span></a></li><li><a class="tocitem" href="#Advanced-Sampling-Techniques"><span>Advanced Sampling Techniques</span></a></li><li><a class="tocitem" href="#Performance-Analysis"><span>Performance Analysis</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Best-Practices"><span>Best Practices</span></a></li></ul></li><li><a class="tocitem" href="../neighborhoods/">Neighborhood Analysis</a></li><li><a class="tocitem" href="../datasets/">Datasets</a></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Sampling Methods</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Sampling Methods</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaTDA/MetricSpaces.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/main/docs/src/sampling.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Sampling-Methods"><a class="docs-heading-anchor" href="#Sampling-Methods">Sampling Methods</a><a id="Sampling-Methods-1"></a><a class="docs-heading-anchor-permalink" href="#Sampling-Methods" title="Permalink"></a></h1><p>MetricSpaces.jl provides several algorithms for sampling representative subsets from metric spaces. These methods are crucial for working with large datasets and creating sparse representations that preserve geometric properties.</p><h2 id="ε-net-Sampling"><a class="docs-heading-anchor" href="#ε-net-Sampling">ε-net Sampling</a><a id="ε-net-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#ε-net-Sampling" title="Permalink"></a></h2><p>An <strong>ε-net</strong> is a subset of points such that every point in the space is within distance ε of at least one point in the subset.</p><h3 id="epsilon_net"><a class="docs-heading-anchor" href="#epsilon_net"><code>epsilon_net</code></a><a id="epsilon_net-1"></a><a class="docs-heading-anchor-permalink" href="#epsilon_net" title="Permalink"></a></h3><pre><code class="language-julia hljs">epsilon_net(X::MetricSpace, ε::Number; d=dist_euclidean)</code></pre><p><strong>Algorithm</strong>: Greedy selection of points that are not yet covered by existing ε-balls.</p><p><strong>Example:</strong></p><pre><code class="language-julia hljs"># Create a dense point cloud
+points = [randn(2) for _ in 1:100]
+X = EuclideanSpace(points)
+
+# Generate ε-net with radius 0.5
+ε = 0.5
+landmarks = epsilon_net(X, ε)
+
+println(&quot;Original space: $(length(X)) points&quot;)
+println(&quot;ε-net: $(length(landmarks)) landmarks&quot;)
+println(&quot;Compression ratio: $(round(length(landmarks)/length(X), digits=3))&quot;)
+
+# Extract landmark points
+landmark_points = X[landmarks]</code></pre><h3 id="Properties-of-ε-nets"><a class="docs-heading-anchor" href="#Properties-of-ε-nets">Properties of ε-nets</a><a id="Properties-of-ε-nets-1"></a><a class="docs-heading-anchor-permalink" href="#Properties-of-ε-nets" title="Permalink"></a></h3><ul><li><strong>Covering</strong>: Every point is within distance ε of some landmark</li><li><strong>Efficiency</strong>: Provides sparse representation of dense point sets</li><li><strong>Deterministic</strong>: Greedy algorithm gives reproducible results</li></ul><pre><code class="language-julia hljs"># Verify covering property
+function verify_epsilon_net(X, landmarks, ε, distance_func=dist_euclidean)
+    uncovered_points = Int[]
+    
+    for i in 1:length(X)
+        min_dist = Inf
+        for landmark_idx in landmarks
+            dist = distance_func(X[i], X[landmark_idx])
+            min_dist = min(min_dist, dist)
+        end
+        
+        if min_dist &gt;= ε
+            push!(uncovered_points, i)
+        end
+    end
+    
+    if isempty(uncovered_points)
+        println(&quot;✓ All points are covered by ε-net&quot;)
+        return true
+    else
+        println(&quot;✗ Uncovered points: &quot;, uncovered_points)
+        return false
+    end
+end
+
+verify_epsilon_net(X, landmarks, ε)</code></pre><h2 id="Farthest-Point-Sampling"><a class="docs-heading-anchor" href="#Farthest-Point-Sampling">Farthest Point Sampling</a><a id="Farthest-Point-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Farthest-Point-Sampling" title="Permalink"></a></h2><p><strong>Farthest Point Sampling (FPS)</strong> greedily selects points that are maximally separated from previously chosen points.</p><h3 id="farthest_points_sample"><a class="docs-heading-anchor" href="#farthest_points_sample"><code>farthest_points_sample</code></a><a id="farthest_points_sample-1"></a><a class="docs-heading-anchor-permalink" href="#farthest_points_sample" title="Permalink"></a></h3><pre><code class="language-julia hljs">farthest_points_sample(X::MetricSpace, k::Int; d=dist_euclidean, start_idx=nothing)</code></pre><p><strong>Algorithm</strong>:</p><ol><li>Start with a random point (or specified starting point)</li><li>Iteratively select the point farthest from all previously selected points</li><li>Continue until k points are selected</li></ol><p><strong>Example:</strong></p><pre><code class="language-julia hljs"># Sample 10 well-separated points
+k = 10
+fps_indices = farthest_points_sample(X, k)
+fps_points = X[fps_indices]
+
+println(&quot;Selected $k points using FPS&quot;)
+println(&quot;Indices: &quot;, fps_indices)
+
+# Analyze separation
+function analyze_separation(X, indices, distance_func=dist_euclidean)
+    min_dist = Inf
+    max_dist = 0.0
+    
+    for i in 1:length(indices)
+        for j in (i+1):length(indices)
+            dist = distance_func(X[indices[i]], X[indices[j]])
+            min_dist = min(min_dist, dist)
+            max_dist = max(max_dist, dist)
+        end
+    end
+    
+    return min_dist, max_dist
+end
+
+min_sep, max_sep = analyze_separation(X, fps_indices)
+println(&quot;Minimum separation: $(round(min_sep, digits=3))&quot;)
+println(&quot;Maximum separation: $(round(max_sep, digits=3))&quot;)</code></pre><h3 id="Controlling-the-Starting-Point"><a class="docs-heading-anchor" href="#Controlling-the-Starting-Point">Controlling the Starting Point</a><a id="Controlling-the-Starting-Point-1"></a><a class="docs-heading-anchor-permalink" href="#Controlling-the-Starting-Point" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Start FPS from a specific point
+center_idx = 1  # Start from first point
+fps_from_center = farthest_points_sample(X, k, start_idx=center_idx)
+
+# Compare with random start
+fps_random_start = farthest_points_sample(X, k)
+
+println(&quot;FPS from center: &quot;, fps_from_center)
+println(&quot;FPS random start: &quot;, fps_random_start)</code></pre><h2 id="Random-Sampling"><a class="docs-heading-anchor" href="#Random-Sampling">Random Sampling</a><a id="Random-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Random-Sampling" title="Permalink"></a></h2><p>Simple random sampling without replacement:</p><h3 id="random_sample"><a class="docs-heading-anchor" href="#random_sample"><code>random_sample</code></a><a id="random_sample-1"></a><a class="docs-heading-anchor-permalink" href="#random_sample" title="Permalink"></a></h3><pre><code class="language-julia hljs">random_sample(X::MetricSpace, k::Int)</code></pre><p><strong>Example:</strong></p><pre><code class="language-julia hljs"># Random sample of 15 points
+random_indices = random_sample(X, 15)
+random_points = X[random_indices]
+
+println(&quot;Random sample indices: &quot;, random_indices)</code></pre><h3 id="Reproducible-Random-Sampling"><a class="docs-heading-anchor" href="#Reproducible-Random-Sampling">Reproducible Random Sampling</a><a id="Reproducible-Random-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducible-Random-Sampling" title="Permalink"></a></h3><pre><code class="language-julia hljs">using Random
+
+# Set seed for reproducible results
+Random.seed!(42)
+reproducible_sample = random_sample(X, 10)
+
+# Reset and sample again - should be identical
+Random.seed!(42)
+identical_sample = random_sample(X, 10)
+
+println(&quot;Samples are identical: &quot;, reproducible_sample == identical_sample)</code></pre><h2 id="Comparing-Sampling-Methods"><a class="docs-heading-anchor" href="#Comparing-Sampling-Methods">Comparing Sampling Methods</a><a id="Comparing-Sampling-Methods-1"></a><a class="docs-heading-anchor-permalink" href="#Comparing-Sampling-Methods" title="Permalink"></a></h2><p>Let&#39;s compare the different sampling methods on the same dataset:</p><pre><code class="language-julia hljs"># Generate test data: points on a circle with some noise
+function generate_noisy_circle(n_points=200, radius=1.0, noise_level=0.1)
+    angles = range(0, 2π, length=n_points+1)[1:end-1]  # Exclude 2π
+    points = Vector{Vector{Float64}}()
+    
+    for θ in angles
+        # Perfect circle point
+        x = radius * cos(θ)
+        y = radius * sin(θ)
+        
+        # Add noise
+        x += randn() * noise_level
+        y += randn() * noise_level
+        
+        push!(points, [x, y])
+    end
+    
+    return EuclideanSpace(points)
+end
+
+circle_data = generate_noisy_circle(200, 1.0, 0.05)
+k = 20  # Sample 20 points
+
+# Compare sampling methods
+eps_net_result = epsilon_net(circle_data, 0.3)
+fps_result = farthest_points_sample(circle_data, k)
+random_result = random_sample(circle_data, k)
+
+println(&quot;Sampling method comparison:&quot;)
+println(&quot;ε-net (ε=0.3): $(length(eps_net_result)) points&quot;)
+println(&quot;FPS (k=$k): $(length(fps_result)) points&quot;)
+println(&quot;Random (k=$k): $(length(random_result)) points&quot;)</code></pre><h2 id="Advanced-Sampling-Techniques"><a class="docs-heading-anchor" href="#Advanced-Sampling-Techniques">Advanced Sampling Techniques</a><a id="Advanced-Sampling-Techniques-1"></a><a class="docs-heading-anchor-permalink" href="#Advanced-Sampling-Techniques" title="Permalink"></a></h2><h3 id="Adaptive-Sampling"><a class="docs-heading-anchor" href="#Adaptive-Sampling">Adaptive Sampling</a><a id="Adaptive-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Adaptive-Sampling" title="Permalink"></a></h3><p>Combine different sampling methods based on local density:</p><pre><code class="language-julia hljs">function adaptive_sample(X::EuclideanSpace, target_size::Int, density_threshold=2.0)
+    # Start with FPS for good coverage
+    initial_sample = farthest_points_sample(X, target_size ÷ 2)
+    
+    # Identify high-density regions
+    remaining_points = setdiff(1:length(X), initial_sample)
+    high_density_regions = Int[]
+    
+    for idx in remaining_points
+        neighbors = ball_ids(X, X[idx], 0.2)  # Small radius
+        if length(neighbors) &gt; density_threshold
+            push!(high_density_regions, idx)
+        end
+    end
+    
+    # Add random samples from high-density regions
+    if length(high_density_regions) &gt; 0
+        additional_count = target_size - length(initial_sample)
+        if additional_count &gt; 0
+            additional_indices = high_density_regions[randperm(length(high_density_regions))[1:min(additional_count, length(high_density_regions))]]
+            return vcat(initial_sample, additional_indices)
+        end
+    end
+    
+    return initial_sample
+end
+
+adaptive_result = adaptive_sample(circle_data, 25)
+println(&quot;Adaptive sampling: $(length(adaptive_result)) points&quot;)</code></pre><h3 id="Stratified-Sampling"><a class="docs-heading-anchor" href="#Stratified-Sampling">Stratified Sampling</a><a id="Stratified-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Stratified-Sampling" title="Permalink"></a></h3><p>Sample uniformly from different regions:</p><pre><code class="language-julia hljs">function stratified_sample(X::EuclideanSpace, n_strata::Int, points_per_stratum::Int)
+    # Simple 2D stratification by quadrants
+    strata = [Int[] for _ in 1:n_strata]
+    
+    # Assign points to strata based on their coordinates
+    for i in 1:length(X)
+        point = X[i]
+        # Simple hash-based assignment
+        stratum = (hash(point) % n_strata) + 1
+        push!(strata[stratum], i)
+    end
+    
+    # Sample from each stratum
+    sampled_indices = Int[]
+    for stratum in strata
+        if length(stratum) &gt;= points_per_stratum
+            sampled = stratum[randperm(length(stratum))[1:points_per_stratum]]
+            append!(sampled_indices, sampled)
+        else
+            append!(sampled_indices, stratum)  # Take all if stratum is small
+        end
+    end
+    
+    return sampled_indices
+end
+
+stratified_result = stratified_sample(circle_data, 4, 5)
+println(&quot;Stratified sampling: $(length(stratified_result)) points&quot;)</code></pre><h2 id="Performance-Analysis"><a class="docs-heading-anchor" href="#Performance-Analysis">Performance Analysis</a><a id="Performance-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Performance-Analysis" title="Permalink"></a></h2><h3 id="Timing-Comparisons"><a class="docs-heading-anchor" href="#Timing-Comparisons">Timing Comparisons</a><a id="Timing-Comparisons-1"></a><a class="docs-heading-anchor-permalink" href="#Timing-Comparisons" title="Permalink"></a></h3><pre><code class="language-julia hljs">using BenchmarkTools
+
+# Large dataset for performance testing
+large_data = EuclideanSpace([randn(10) for _ in 1:1000])
+k = 50
+
+println(&quot;Performance comparison on 1000 points in 10D:&quot;)
+
+# Benchmark different methods
+println(&quot;Random sampling:&quot;)
+@btime random_sample($large_data, $k)
+
+println(&quot;Farthest point sampling:&quot;)
+@btime farthest_points_sample($large_data, $k)
+
+println(&quot;ε-net sampling:&quot;)
+@btime epsilon_net($large_data, 1.0)</code></pre><h3 id="Memory-Usage"><a class="docs-heading-anchor" href="#Memory-Usage">Memory Usage</a><a id="Memory-Usage-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Usage" title="Permalink"></a></h3><pre><code class="language-julia hljs">function memory_usage_analysis(X::EuclideanSpace)
+    n = length(X)
+    point_dim = length(X[1])
+    
+    # Estimate memory usage for different operations
+    point_size = sizeof(X[1])
+    total_points_memory = n * point_size
+    
+    # Distance matrix would require O(n²) memory
+    distance_matrix_memory = n^2 * sizeof(Float64)
+    
+    println(&quot;Memory analysis for $(n) points in $(point_dim)D:&quot;)
+    println(&quot;Points storage: $(round(total_points_memory/1024, digits=2)) KB&quot;)
+    println(&quot;Full distance matrix: $(round(distance_matrix_memory/1024/1024, digits=2)) MB&quot;)
+    
+    # Sampling reduces memory requirements
+    sample_fraction = 0.1
+    sampled_memory = (n * sample_fraction)^2 * sizeof(Float64)
+    println(&quot;10% sample distance matrix: $(round(sampled_memory/1024, digits=2)) KB&quot;)
+end
+
+memory_usage_analysis(large_data)</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Landmark-Based-Approximation"><a class="docs-heading-anchor" href="#Landmark-Based-Approximation">Landmark-Based Approximation</a><a id="Landmark-Based-Approximation-1"></a><a class="docs-heading-anchor-permalink" href="#Landmark-Based-Approximation" title="Permalink"></a></h3><p>Use sampled points as landmarks for approximating distances:</p><pre><code class="language-julia hljs">function landmark_approximation(X::EuclideanSpace, query_point, landmarks_indices, distance_func=dist_euclidean)
+    # Approximate distance from query point to all points in X
+    # using distances to landmarks
+    
+    landmark_distances = [distance_func(query_point, X[idx]) for idx in landmarks_indices]
+    approximations = Float64[]
+    
+    for i in 1:length(X)
+        # Use triangle inequality for approximation
+        min_approx = Inf
+        for (j, landmark_idx) in enumerate(landmarks_indices)
+            # Triangle inequality: |d(q,x) - d(q,l)| ≤ d(x,l)
+            landmark_to_point = distance_func(X[landmark_idx], X[i])
+            approx = abs(landmark_distances[j] - landmark_to_point)
+            min_approx = min(min_approx, approx)
+        end
+        push!(approximations, min_approx)
+    end
+    
+    return approximations
+end
+
+# Example usage
+landmarks = farthest_points_sample(X, 5)
+query = [0.5, 0.5]
+approximations = landmark_approximation(X, query, landmarks)</code></pre><h3 id="Multi-Scale-Sampling"><a class="docs-heading-anchor" href="#Multi-Scale-Sampling">Multi-Scale Sampling</a><a id="Multi-Scale-Sampling-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Scale-Sampling" title="Permalink"></a></h3><p>Create hierarchical samples at different scales:</p><pre><code class="language-julia hljs">function multiscale_sampling(X::EuclideanSpace, scales=[1.0, 0.5, 0.25])
+    samples = Dict{Float64, Vector{Int}}()
+    
+    for scale in scales
+        # Use ε-net with scale as radius
+        sample_indices = epsilon_net(X, scale)
+        samples[scale] = sample_indices
+        println(&quot;Scale $scale: $(length(sample_indices)) points&quot;)
+    end
+    
+    return samples
+end
+
+multiscale_result = multiscale_sampling(circle_data, [0.5, 0.3, 0.1])</code></pre><h2 id="Best-Practices"><a class="docs-heading-anchor" href="#Best-Practices">Best Practices</a><a id="Best-Practices-1"></a><a class="docs-heading-anchor-permalink" href="#Best-Practices" title="Permalink"></a></h2><h3 id="Choosing-Sample-Size"><a class="docs-heading-anchor" href="#Choosing-Sample-Size">Choosing Sample Size</a><a id="Choosing-Sample-Size-1"></a><a class="docs-heading-anchor-permalink" href="#Choosing-Sample-Size" title="Permalink"></a></h3><pre><code class="language-julia hljs">function estimate_sample_size(X::EuclideanSpace, target_error=0.1)
+    # Rough heuristic: sample size based on intrinsic dimension
+    n = length(X)
+    dim = length(X[1])
+    
+    # More points needed for higher dimensions
+    base_sample = max(10, Int(ceil(dim * 5)))
+    
+    # Scale with dataset size (logarithmically)
+    size_factor = log(n) / log(100)  # Normalized to log(100)
+    
+    estimated_size = Int(ceil(base_sample * size_factor))
+    
+    println(&quot;Estimated sample size for $n points in $(dim)D: $estimated_size&quot;)
+    return min(estimated_size, n ÷ 2)  # Don&#39;t sample more than half
+end
+
+recommended_size = estimate_sample_size(circle_data)
+optimal_sample = farthest_points_sample(circle_data, recommended_size)</code></pre><h3 id="Quality-Assessment"><a class="docs-heading-anchor" href="#Quality-Assessment">Quality Assessment</a><a id="Quality-Assessment-1"></a><a class="docs-heading-anchor-permalink" href="#Quality-Assessment" title="Permalink"></a></h3><pre><code class="language-julia hljs">function assess_sample_quality(X::EuclideanSpace, sample_indices, distance_func=dist_euclidean)
+    sample_points = X[sample_indices]
+    
+    # Coverage: average distance to nearest sample point
+    coverage_distances = Float64[]
+    for i in 1:length(X)
+        min_dist = minimum(distance_func(X[i], sample_points[j]) for j in 1:length(sample_points))
+        push!(coverage_distances, min_dist)
+    end
+    
+    avg_coverage = mean(coverage_distances)
+    max_coverage = maximum(coverage_distances)
+    
+    # Separation: minimum distance between sample points
+    min_separation = Inf
+    for i in 1:length(sample_points)
+        for j in (i+1):length(sample_points)
+            dist = distance_func(sample_points[i], sample_points[j])
+            min_separation = min(min_separation, dist)
+        end
+    end
+    
+    println(&quot;Sample quality assessment:&quot;)
+    println(&quot;  Average coverage distance: $(round(avg_coverage, digits=4))&quot;)
+    println(&quot;  Maximum coverage distance: $(round(max_coverage, digits=4))&quot;)
+    println(&quot;  Minimum separation: $(round(min_separation, digits=4))&quot;)
+    
+    return (coverage=avg_coverage, max_coverage=max_coverage, separation=min_separation)
+end
+
+# Compare quality of different sampling methods
+println(&quot;FPS quality:&quot;)
+fps_quality = assess_sample_quality(circle_data, fps_result)
+
+println(&quot;\nRandom sampling quality:&quot;)
+random_quality = assess_sample_quality(circle_data, random_result)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../balls/">« Metric Balls</a><a class="docs-footer-nextpage" href="../neighborhoods/">Neighborhood Analysis »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Thursday 12 June 2025 01:53">Thursday 12 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Metric Balls · MetricSpaces.jl</title><meta name="title" content="Metric Balls · MetricSpaces.jl"/><meta property="og:title" content="Metric Balls · MetricSpaces.jl"/><meta property="twitter:title" content="Metric Balls · MetricSpaces.jl"/><meta name="description" content="Documentation for MetricSpaces.jl."/><meta property="og:description" content="Documentation for MetricSpaces.jl."/><meta property="twitter:description" content="Documentation for MetricSpaces.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">MetricSpaces.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../mathematical_background/">Mathematical Background</a></li><li><a class="tocitem" href="../getting_started/">Getting Started</a></li><li><a class="tocitem" href="../types/">Core Types</a></li><li><a class="tocitem" href="../distances/">Distance Functions</a></li><li class="is-active"><a class="tocitem" href>Metric Balls</a><ul class="internal"><li><a class="tocitem" href="#Basic-Concepts"><span>Basic Concepts</span></a></li><li><a class="tocitem" href="#Ball-Functions"><span>Ball Functions</span></a></li><li><a class="tocitem" href="#Working-with-Different-Distance-Functions"><span>Working with Different Distance Functions</span></a></li><li><a class="tocitem" href="#Visual-Comparison-of-Ball-Shapes"><span>Visual Comparison of Ball Shapes</span></a></li><li><a class="tocitem" href="#Advanced-Ball-Operations"><span>Advanced Ball Operations</span></a></li><li><a class="tocitem" href="#Performance-Optimization"><span>Performance Optimization</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Edge-Cases-and-Considerations"><span>Edge Cases and Considerations</span></a></li></ul></li><li><a class="tocitem" href="../sampling/">Sampling Methods</a></li><li><a class="tocitem" href="../neighborhoods/">Neighborhood Analysis</a></li><li><a class="tocitem" href="../datasets/">Datasets</a></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Metric Balls</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Metric Balls</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaTDA/MetricSpaces.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/main/docs/src/balls.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Metric-Balls"><a class="docs-heading-anchor" href="#Metric-Balls">Metric Balls</a><a id="Metric-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Metric-Balls" title="Permalink"></a></h1><p>Metric balls are fundamental geometric objects in metric spaces that represent neighborhoods around points. MetricSpaces.jl provides efficient functions for working with balls and performing neighborhood queries.</p><h2 id="Basic-Concepts"><a class="docs-heading-anchor" href="#Basic-Concepts">Basic Concepts</a><a id="Basic-Concepts-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Concepts" title="Permalink"></a></h2><h3 id="Open-Balls"><a class="docs-heading-anchor" href="#Open-Balls">Open Balls</a><a id="Open-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Open-Balls" title="Permalink"></a></h3><p>An <strong>open ball</strong> <span>$B(x, r)$</span> centered at point <span>$x$</span> with radius <span>$r$</span> is the set of all points within distance <span>$r$</span> of <span>$x$</span>:</p><p class="math-container">\[B(x, r) = \{y \in X : d(x, y) &lt; r\}\]</p><h3 id="Closed-Balls"><a class="docs-heading-anchor" href="#Closed-Balls">Closed Balls</a><a id="Closed-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Closed-Balls" title="Permalink"></a></h3><p>A <strong>closed ball</strong> <span>$\overline{B}(x, r)$</span> includes points exactly at distance <span>$r$</span>:</p><p class="math-container">\[\overline{B}(x, r) = \{y \in X : d(x, y) \leq r\}\]</p><p><em>Note: MetricSpaces.jl implements open balls by default (using strict inequality).</em></p><h2 id="Ball-Functions"><a class="docs-heading-anchor" href="#Ball-Functions">Ball Functions</a><a id="Ball-Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Ball-Functions" title="Permalink"></a></h2><h3 id="ball_ids-Get-Indices-in-Ball"><a class="docs-heading-anchor" href="#ball_ids-Get-Indices-in-Ball"><code>ball_ids</code> - Get Indices in Ball</a><a id="ball_ids-Get-Indices-in-Ball-1"></a><a class="docs-heading-anchor-permalink" href="#ball_ids-Get-Indices-in-Ball" title="Permalink"></a></h3><p>Find the indices of points within a ball:</p><pre><code class="language-julia hljs">ball_ids(X::MetricSpace, center, radius, distance_function=dist_euclidean)</code></pre><p><strong>Example:</strong></p><pre><code class="language-julia hljs"># Create a 2D metric space
+points = [[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0], [2.0, 2.0]]
+X = EuclideanSpace(points)
+
+# Find points within distance 1.5 of origin
+center = [0.0, 0.0]
+radius = 1.5
+indices = ball_ids(X, center, radius)
+println(&quot;Points in ball: &quot;, indices)  # [1, 2, 3, 4]</code></pre><h3 id="ball-Get-Points-in-Ball"><a class="docs-heading-anchor" href="#ball-Get-Points-in-Ball"><code>ball</code> - Get Points in Ball</a><a id="ball-Get-Points-in-Ball-1"></a><a class="docs-heading-anchor-permalink" href="#ball-Get-Points-in-Ball" title="Permalink"></a></h3><p>Retrieve the actual points (not just indices) within a ball:</p><pre><code class="language-julia hljs">ball(X::MetricSpace, center, radius, distance_function=dist_euclidean)</code></pre><p><strong>Example:</strong></p><pre><code class="language-julia hljs"># Get the actual points in the ball
+points_in_ball = ball(X, center, radius)
+println(&quot;Points in ball:&quot;)
+for (i, point) in enumerate(points_in_ball)
+    println(&quot;  $i: $point&quot;)
+end</code></pre><h2 id="Working-with-Different-Distance-Functions"><a class="docs-heading-anchor" href="#Working-with-Different-Distance-Functions">Working with Different Distance Functions</a><a id="Working-with-Different-Distance-Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Different-Distance-Functions" title="Permalink"></a></h2><h3 id="Euclidean-Balls"><a class="docs-heading-anchor" href="#Euclidean-Balls">Euclidean Balls</a><a id="Euclidean-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Euclidean-Balls" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Standard Euclidean ball
+euclidean_ball = ball_ids(X, [0.0, 0.0], 1.5, dist_euclidean)</code></pre><h3 id="Manhattan-Balls"><a class="docs-heading-anchor" href="#Manhattan-Balls">Manhattan Balls</a><a id="Manhattan-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Manhattan-Balls" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Manhattan distance creates diamond-shaped &quot;balls&quot;
+manhattan_ball = ball_ids(X, [0.0, 0.0], 2.0, dist_cityblock)</code></pre><h3 id="Chebyshev-Balls"><a class="docs-heading-anchor" href="#Chebyshev-Balls">Chebyshev Balls</a><a id="Chebyshev-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Chebyshev-Balls" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Chebyshev distance creates square-shaped &quot;balls&quot;  
+chebyshev_ball = ball_ids(X, [0.0, 0.0], 1.0, dist_chebyshev)</code></pre><h2 id="Visual-Comparison-of-Ball-Shapes"><a class="docs-heading-anchor" href="#Visual-Comparison-of-Ball-Shapes">Visual Comparison of Ball Shapes</a><a id="Visual-Comparison-of-Ball-Shapes-1"></a><a class="docs-heading-anchor-permalink" href="#Visual-Comparison-of-Ball-Shapes" title="Permalink"></a></h2><p>Let&#39;s create a comprehensive example showing how different distance functions create different ball shapes:</p><pre><code class="language-julia hljs"># Create a grid of points for visualization
+function create_grid_points(range_x, range_y, step=0.5)
+    points = Vector{Vector{Float64}}()
+    for x in range_x[1]:step:range_x[2]
+        for y in range_y[1]:step:range_y[2]
+            push!(points, [x, y])
+        end
+    end
+    return EuclideanSpace(points)
+end
+
+# Create a 5x5 grid centered at origin
+grid = create_grid_points((-2, 2), (-2, 2), 0.5)
+center = [0.0, 0.0]
+radius = 1.0
+
+# Compare different ball shapes
+euclidean_indices = ball_ids(grid, center, radius, dist_euclidean)
+manhattan_indices = ball_ids(grid, center, radius, dist_cityblock)
+chebyshev_indices = ball_ids(grid, center, radius, dist_chebyshev)
+
+println(&quot;Ball comparison with radius $radius:&quot;)
+println(&quot;Euclidean ball contains $(length(euclidean_indices)) points&quot;)
+println(&quot;Manhattan ball contains $(length(manhattan_indices)) points&quot;) 
+println(&quot;Chebyshev ball contains $(length(chebyshev_indices)) points&quot;)
+
+# Get the actual points for each ball type
+euclidean_points = ball(grid, center, radius, dist_euclidean)
+manhattan_points = ball(grid, center, radius, dist_cityblock)
+chebyshev_points = ball(grid, center, radius, dist_chebyshev)</code></pre><h2 id="Advanced-Ball-Operations"><a class="docs-heading-anchor" href="#Advanced-Ball-Operations">Advanced Ball Operations</a><a id="Advanced-Ball-Operations-1"></a><a class="docs-heading-anchor-permalink" href="#Advanced-Ball-Operations" title="Permalink"></a></h2><h3 id="Multiple-Centers"><a class="docs-heading-anchor" href="#Multiple-Centers">Multiple Centers</a><a id="Multiple-Centers-1"></a><a class="docs-heading-anchor-permalink" href="#Multiple-Centers" title="Permalink"></a></h3><p>Find points within balls around multiple centers:</p><pre><code class="language-julia hljs"># Multiple centers
+centers = [[0.0, 0.0], [2.0, 2.0], [-1.0, 1.0]]
+radius = 1.0
+
+# Find points in union of all balls
+union_points = Set{Int}()
+for center in centers
+    ball_indices = ball_ids(X, center, radius)
+    union!(union_points, ball_indices)
+end
+
+println(&quot;Points in union of balls: &quot;, sort(collect(union_points)))</code></pre><h3 id="Nested-Balls"><a class="docs-heading-anchor" href="#Nested-Balls">Nested Balls</a><a id="Nested-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Nested-Balls" title="Permalink"></a></h3><p>Analyze the structure of nested balls:</p><pre><code class="language-julia hljs"># Create nested balls with increasing radii
+center = [0.0, 0.0]
+radii = [0.5, 1.0, 1.5, 2.0, 2.5]
+
+println(&quot;Nested ball structure:&quot;)
+for r in radii
+    ball_indices = ball_ids(X, center, r)
+    println(&quot;Radius $r: $(length(ball_indices)) points&quot;)
+end</code></pre><h3 id="Ball-Intersection"><a class="docs-heading-anchor" href="#Ball-Intersection">Ball Intersection</a><a id="Ball-Intersection-1"></a><a class="docs-heading-anchor-permalink" href="#Ball-Intersection" title="Permalink"></a></h3><p>Find points that are in the intersection of multiple balls:</p><pre><code class="language-julia hljs"># Two centers with overlapping balls
+center1 = [0.0, 0.0]
+center2 = [1.0, 0.0]
+radius = 1.0
+
+ball1_indices = Set(ball_ids(X, center1, radius))
+ball2_indices = Set(ball_ids(X, center2, radius))
+
+# Intersection
+intersection_indices = intersect(ball1_indices, ball2_indices)
+println(&quot;Points in intersection: &quot;, sort(collect(intersection_indices)))
+
+# Union  
+union_indices = union(ball1_indices, ball2_indices)
+println(&quot;Points in union: &quot;, sort(collect(union_indices)))
+
+# Difference
+difference_indices = setdiff(ball1_indices, ball2_indices)
+println(&quot;Points in ball1 but not ball2: &quot;, sort(collect(difference_indices)))</code></pre><h2 id="Performance-Optimization"><a class="docs-heading-anchor" href="#Performance-Optimization">Performance Optimization</a><a id="Performance-Optimization-1"></a><a class="docs-heading-anchor-permalink" href="#Performance-Optimization" title="Permalink"></a></h2><h3 id="Efficient-Ball-Queries"><a class="docs-heading-anchor" href="#Efficient-Ball-Queries">Efficient Ball Queries</a><a id="Efficient-Ball-Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Efficient-Ball-Queries" title="Permalink"></a></h3><p>For repeated ball queries, consider pre-computing distance matrices:</p><pre><code class="language-julia hljs"># For small spaces, pre-compute distance matrix
+function precompute_distances(X::EuclideanSpace, distance_func=dist_euclidean)
+    n = length(X)
+    distances = Matrix{Float64}(undef, n, n)
+    
+    for i in 1:n
+        for j in 1:n
+            distances[i, j] = distance_func(X[i], X[j])
+        end
+    end
+    
+    return distances
+end
+
+# Fast ball queries using pre-computed distances
+function fast_ball_ids(distances::Matrix, center_idx::Int, radius::Float64)
+    return findall(d -&gt; d &lt; radius, distances[center_idx, :])
+end
+
+# Example usage
+distances = precompute_distances(X)
+center_idx = 1
+fast_ball = fast_ball_ids(distances, center_idx, 1.5)</code></pre><h3 id="Large-Scale-Ball-Queries"><a class="docs-heading-anchor" href="#Large-Scale-Ball-Queries">Large-Scale Ball Queries</a><a id="Large-Scale-Ball-Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Large-Scale-Ball-Queries" title="Permalink"></a></h3><p>For large datasets, use spatial data structures or approximate methods:</p><pre><code class="language-julia hljs"># Approximate ball query for large datasets
+function approximate_ball_ids(X::EuclideanSpace, center, radius, sample_fraction=0.1)
+    n = length(X)
+    sample_size = max(1, Int(floor(n * sample_fraction)))
+    
+    # Random sample for approximate query
+    sample_indices = randperm(n)[1:sample_size]
+    
+    ball_indices = Int[]
+    for idx in sample_indices
+        if dist_euclidean(X[idx], center) &lt; radius
+            push!(ball_indices, idx)
+        end
+    end
+    
+    return ball_indices
+end</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Outlier-Detection"><a class="docs-heading-anchor" href="#Outlier-Detection">Outlier Detection</a><a id="Outlier-Detection-1"></a><a class="docs-heading-anchor-permalink" href="#Outlier-Detection" title="Permalink"></a></h3><p>Use ball queries to identify outliers:</p><pre><code class="language-julia hljs">function detect_outliers(X::EuclideanSpace, min_neighbors=2, radius=1.0)
+    outliers = Int[]
+    
+    for i in 1:length(X)
+        neighbors = ball_ids(X, X[i], radius)
+        # Remove the point itself from neighbor count
+        neighbor_count = length(neighbors) - 1
+        
+        if neighbor_count &lt; min_neighbors
+            push!(outliers, i)
+        end
+    end
+    
+    return outliers
+end
+
+# Find outliers in the dataset
+outlier_indices = detect_outliers(X, 1, 1.0)
+println(&quot;Outlier indices: &quot;, outlier_indices)</code></pre><h3 id="Local-Density-Estimation"><a class="docs-heading-anchor" href="#Local-Density-Estimation">Local Density Estimation</a><a id="Local-Density-Estimation-1"></a><a class="docs-heading-anchor-permalink" href="#Local-Density-Estimation" title="Permalink"></a></h3><p>Estimate local density using ball counts:</p><pre><code class="language-julia hljs">function local_density(X::EuclideanSpace, radius=1.0)
+    densities = Float64[]
+    
+    for i in 1:length(X)
+        ball_indices = ball_ids(X, X[i], radius)
+        # Density = number of neighbors / ball volume
+        # For 2D: ball area = π * r²
+        density = length(ball_indices) / (π * radius^2)
+        push!(densities, density)
+    end
+    
+    return densities
+end
+
+densities = local_density(X, 1.0)
+println(&quot;Local densities: &quot;, densities)</code></pre><h3 id="Clustering"><a class="docs-heading-anchor" href="#Clustering">Clustering</a><a id="Clustering-1"></a><a class="docs-heading-anchor-permalink" href="#Clustering" title="Permalink"></a></h3><p>Use balls for simple clustering:</p><pre><code class="language-julia hljs">function ball_clustering(X::EuclideanSpace, radius=1.0)
+    n = length(X)
+    visited = falses(n)
+    clusters = Vector{Vector{Int}}()
+    
+    for i in 1:n
+        if !visited[i]
+            # Start new cluster
+            cluster = ball_ids(X, X[i], radius)
+            
+            # Mark all points in cluster as visited
+            for idx in cluster
+                visited[idx] = true
+            end
+            
+            push!(clusters, cluster)
+        end
+    end
+    
+    return clusters
+end
+
+clusters = ball_clustering(X, 1.5)
+println(&quot;Found $(length(clusters)) clusters:&quot;)
+for (i, cluster) in enumerate(clusters)
+    println(&quot;  Cluster $i: $cluster&quot;)
+end</code></pre><h2 id="Edge-Cases-and-Considerations"><a class="docs-heading-anchor" href="#Edge-Cases-and-Considerations">Edge Cases and Considerations</a><a id="Edge-Cases-and-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-Cases-and-Considerations" title="Permalink"></a></h2><h3 id="Empty-Balls"><a class="docs-heading-anchor" href="#Empty-Balls">Empty Balls</a><a id="Empty-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Empty-Balls" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Very small radius might result in empty balls
+tiny_radius = 1e-10
+tiny_ball = ball_ids(X, [0.0, 0.0], tiny_radius)
+println(&quot;Tiny ball contains: &quot;, length(tiny_ball), &quot; points&quot;)</code></pre><h3 id="Large-Balls"><a class="docs-heading-anchor" href="#Large-Balls">Large Balls</a><a id="Large-Balls-1"></a><a class="docs-heading-anchor-permalink" href="#Large-Balls" title="Permalink"></a></h3><pre><code class="language-julia hljs"># Very large radius includes all points
+large_radius = 1000.0
+large_ball = ball_ids(X, [0.0, 0.0], large_radius)
+println(&quot;Large ball contains: &quot;, length(large_ball), &quot; points (total: $(length(X)))&quot;)</code></pre><h3 id="Boundary-Effects"><a class="docs-heading-anchor" href="#Boundary-Effects">Boundary Effects</a><a id="Boundary-Effects-1"></a><a class="docs-heading-anchor-permalink" href="#Boundary-Effects" title="Permalink"></a></h3><p>When working with finite point sets, be aware that balls near the boundary might have fewer neighbors than expected:</p><pre><code class="language-julia hljs"># Points on the boundary of the point cloud
+boundary_point = X[end]  # Likely on boundary
+interior_point = X[1]    # Likely more central
+
+boundary_ball = ball_ids(X, boundary_point, 1.0)
+interior_ball = ball_ids(X, interior_point, 1.0)
+
+println(&quot;Boundary point has $(length(boundary_ball)) neighbors&quot;)
+println(&quot;Interior point has $(length(interior_ball)) neighbors&quot;)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../distances/">« Distance Functions</a><a class="docs-footer-nextpage" href="../sampling/">Sampling Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Thursday 12 June 2025 01:53">Thursday 12 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
