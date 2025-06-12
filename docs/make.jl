@@ -21,11 +21,12 @@ makedocs(;
         "API Reference" => "api.md"
     ],
     checkdocs=:exports,
-    doctest=false
+    doctest=false,
+    clean = true
 )
 
 # Deploy documentation if running in CI
-deploydocs(;
-    repo="github.com/JuliaTDA/MetricSpaces.jl.git"
+DocumenterVitepress.deploydocs(;
+    repo="github.com/JuliaTDA/MetricSpaces.jl.git", push_preview=true
 )
 
