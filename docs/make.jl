@@ -5,10 +5,8 @@ makedocs(;
     modules=[MetricSpaces],
     sitename="MetricSpaces.jl",
     authors="G. Vituri <56522687+vituri@users.noreply.github.com> and contributors",
-    format=Documenter.HTML(
-        ;
-        prettyurls=get(ENV, "CI", "false") == "true",
-        assets=String[],
+    format=MarkdownVitepress(
+        repo="https://github.com/JuliaTDA/MetricSpaces.jl",
     ),
     pages=[
         "Home" => "index.md",
