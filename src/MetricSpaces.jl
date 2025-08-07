@@ -5,7 +5,6 @@ using Base.Threads
 using StatsBase: mean
 using ProgressMeter
 using StaticArrays
-using DataFrames
 using Graphs
 using TestItems
 
@@ -19,6 +18,12 @@ export
     as_matrix,
     SubsetIndex,
     Covering;
+
+include("base/real.jl");
+export Interval,
+    IntervalCovering,
+    is_not_disjoint,
+    in;
 
 include("base/norm.jl");
 export 

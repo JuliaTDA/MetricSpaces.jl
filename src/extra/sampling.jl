@@ -109,6 +109,15 @@ function farthest_points_sample_ids(X::MetricSpace, n::Integer; d = euclidean)
 
     return ids
 end
+
+@testitem "farthest_points_sample_ids" begin
+    using MetricSpaces    
+    X = sphere(1000)
+    ids = farthest_points_sample_ids(X, 100)
+    @test length(ids) == 100
+end
+
+
 """
     farthest_points_sample(X::MetricSpace, n::Integer; d = euclidean)
 
@@ -142,8 +151,14 @@ The algorithm works as follows:
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
 function farthest_points_sample(X::MetricSpace, n::Integer; d = euclidean)
-    ids = fartest_points_sample_ids(X, n, d)
+    ids = farthest_points_sample_ids(X, n; d = d)
     X[ids]
+end
+
+@testitem "farthest_points_sample" begin
+    using MetricSpaces    
+    X = sphere(1000)
+    farthest_points_sample(X, 100)
 end
 
 """
