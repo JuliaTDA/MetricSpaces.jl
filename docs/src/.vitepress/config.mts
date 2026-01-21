@@ -13,7 +13,7 @@ export default defineConfig({
   outDir: 'REPLACE_ME_DOCUMENTER_VITEPRESS', // This is required for MarkdownVitepress to work correctly.
 
   head: [
-    ['link', { rel: 'icon', href: 'REPLACE_ME_DOCUMENTER_VITEPRESS_FAVICON' }]
+    ['link', { rel: 'icon', href: '/favicon.ico' }]
   ],
 
   markdown: {
@@ -31,7 +31,7 @@ export default defineConfig({
 
   themeConfig: {
     outline: 'deep',
-    logo: { src: 'REPLACE_ME_DOCUMENTER_VITEPRESS_LOGO', width: 24, height: 24 },
+    logo: { src: '/favicon.ico', width: 24, height: 24 },
     search: {
       provider: 'local',
       options: {

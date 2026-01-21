@@ -1,32 +1,36 @@
-using Documenter, DocumenterVitepress
+using Documenter
+using DocumenterVitepress
 using MetricSpaces
 
 makedocs(;
-    modules=[MetricSpaces],
-    sitename="MetricSpaces.jl",
-    authors="G. Vituri <56522687+vituri@users.noreply.github.com> and contributors",
-    format=MarkdownVitepress(
-        repo="https://github.com/JuliaTDA/MetricSpaces.jl",
+    modules = [MetricSpaces],
+    sitename = "MetricSpaces.jl",
+    authors = "G. Vituri and contributors",
+    format = DocumenterVitepress.MarkdownVitepress(
+        repo = "https://github.com/JuliaTDA/MetricSpaces.jl",
+        devurl = "dev",
     ),
-    pages=[
+    pages = [
         "Home" => "index.md",
-        "Mathematical Background" => "mathematical_background.md",
         "Getting Started" => "getting_started.md",
-        "Core Types" => "types.md",
-        "Distance Functions" => "distances.md",
-        "Metric Balls" => "balls.md",
-        "Sampling Methods" => "sampling.md",
-        "Neighborhood Analysis" => "neighborhoods.md",
-        "Datasets" => "datasets.md",
-        "API Reference" => "api.md"
+        "Mathematical Background" => "mathematical_background.md",
+        "Reference" => [
+            "Core Types" => "types.md",
+            "Distance Functions" => "distances.md",
+            "Metric Balls" => "balls.md",
+            "Sampling Methods" => "sampling.md",
+            "Neighborhood Analysis" => "neighborhoods.md",
+            "Datasets" => "datasets.md",
+        ],
+        "API Reference" => "api.md",
     ],
-    checkdocs=:exports,
-    doctest=false,
-    clean = true
+    warnonly = [:missing_docs, :cross_references],
 )
 
-# Deploy documentation if running in CI
-DocumenterVitepress.deploydocs(;
-    repo="github.com/JuliaTDA/MetricSpaces.jl.git", push_preview=true
+deploydocs(;
+    repo = "github.com/JuliaTDA/MetricSpaces.jl",
+    target = "build",
+    branch = "gh-pages",
+    devbranch = "main",
+    push_preview = true,
 )
-

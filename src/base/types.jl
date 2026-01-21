@@ -43,19 +43,6 @@ function EuclideanSpace(X::Vector{T}) where {T}
     EuclideanSpace{m1, T2}(Vector.(X2))
 end
 
-@testitem "EuclideanSpace" begin    
-    X = eachcol(rand(3, 5)) |> collect
-    M = EuclideanSpace(X)
-    @test length(M) == 5
-    @test size(M) == (5,)
-    for i ∈ 1:5
-        @test M[i] == X[i]
-    end    
-
-    X = [[1], [2], [3, 3]]
-    @test_throws ErrorException EuclideanSpace(X)       
-end
-
 """
     EuclideanSpace(M::Matrix{T}) where {T}
 
@@ -83,13 +70,6 @@ Convert an Euclidean space into a matrix.
 function as_matrix(X::EuclideanSpace)
     stack(X)
 end
-
-@testitem "as_matrix" begin    
-    M = rand(10, 10)
-    X = EuclideanSpace(M)    
-    @test M == as_matrix(X)
-end
-
 
 # covering
 

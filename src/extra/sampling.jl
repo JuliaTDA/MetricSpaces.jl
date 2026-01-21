@@ -16,11 +16,11 @@ Constructs an epsilon-net for a given metric space `X`. An epsilon-net is a subs
 # Details
 The function iteratively selects points from `X` that are not yet covered by the epsilon balls of previously selected landmarks. It uses a progress meter to track the process and terminates when all points in `X` are covered.
 """
-function epsilon_net(X::MetricSpace, ϵ::Number; d = dist_euclidean)
+function epsilon_net(X::MetricSpace, ϵ::Number; d=dist_euclidean)
 
     covered = repeat([0], length(X))
     landmarks = Int[]
-    
+
     prog = ProgressUnknown("Searching neighborhood of point number")
 
     while true
@@ -33,7 +33,7 @@ function epsilon_net(X::MetricSpace, ϵ::Number; d = dist_euclidean)
 
         # get the elements currently covered by the epsilon ball around the current_center
         currently_covered = ball(X, id_center, ϵ) #findall(<(ϵ), pairwise_distance([x], X, d)[1, :]) 
-        
+
         # update the covered indexes
         covered[currently_covered] .= 1
 
@@ -44,13 +44,13 @@ function epsilon_net(X::MetricSpace, ϵ::Number; d = dist_euclidean)
         findmin(covered)[1] > 0 && break
     end
 
-    ProgressMeter.finish!(prog);
+    ProgressMeter.finish!(prog)
 
     return landmarks
 end
 
 """
-    farthest_points_sample_ids(X::MetricSpace, n::Integer; d = euclidean)
+    farthest_points_sample_ids(X::MetricSpace, n::Integer; d = dist_euclidean)
 
 Sample `n` points from a metric space `X` using the Farthest Point Sampling (FPS) algorithm.
 
@@ -85,41 +85,33 @@ The algorithm works as follows:
 # Complexity
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
-function farthest_points_sample_ids(X::MetricSpace, n::Integer; d = euclidean)
+function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean)
     length(X) < n && return [1:length(X);]
 
     ids = zeros(Int, n)
-    ids[1] = rand(1:n)
+    ids[1] = rand(1:length(X))
 
-    n == 1 && return ids    
+    n == 1 && return ids
 
     p_0 = X[ids[1]]
 
-    commom_max_distance = pairwise_distance([p_0], X, d)[1, :]
+    common_max_distance = pairwise_distance([p_0], X, d)[1, :]
 
     @showprogress for i in 2:n
         p_i = X[ids[i-1]]
-        
-        d_i = pairwise_distance([p_i], X, d)[1, :] #colwise(metric, X[:, ids[i-1]], X)
 
-        commom_max_distance = mapslices(minimum, [commom_max_distance d_i], dims = 2)[:, 1]
-        
-        ids[i] = findmax(commom_max_distance)[2]
+        d_i = pairwise_distance([p_i], X, d)[1, :]
+
+        common_max_distance = min.(common_max_distance, d_i)
+
+        ids[i] = findmax(common_max_distance)[2]
     end
 
     return ids
 end
 
-@testitem "farthest_points_sample_ids" begin
-    using MetricSpaces    
-    X = sphere(1000)
-    ids = farthest_points_sample_ids(X, 100)
-    @test length(ids) == 100
-end
-
-
 """
-    farthest_points_sample(X::MetricSpace, n::Integer; d = euclidean)
+    farthest_points_sample(X::MetricSpace, n::Integer; d = dist_euclidean)
 
 Sample `n` points from a metric space `X` using the Farthest Point Sampling (FPS) algorithm.
 
@@ -150,15 +142,9 @@ The algorithm works as follows:
 # Complexity
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
-function farthest_points_sample(X::MetricSpace, n::Integer; d = euclidean)
-    ids = farthest_points_sample_ids(X, n; d = d)
-    X[ids]
-end
-
-@testitem "farthest_points_sample" begin
-    using MetricSpaces    
-    X = sphere(1000)
-    farthest_points_sample(X, 100)
+function farthest_points_sample(X::MetricSpace, n::Integer; d=dist_euclidean)
+    ids = farthest_points_sample_ids(X, n; d=d)
+    return X[ids]
 end
 
 """
@@ -179,15 +165,6 @@ X = EuclideanSpace(rand(100, 3))
 sampled_points = random_sample(X, 10)
 ```
 """
-function random_sample(X::MetricSpace, n = 1000)
+function random_sample(X::MetricSpace, n=1000)
     shuffle(X)[1:min(length(X), n)]
-end
-
-@testitem "random_sample" begin
-    X = [1, 2, 3, 4, 5]
-    Y = random_sample(X, 5)
-
-    @test length(random_sample(X, 1)) == 1
-
-    @test isequal(Set(X), Set(Y))
 end

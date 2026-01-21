@@ -1,25 +1,23 @@
 """
-    immersion(X::PointCloud, n::Integer)
+    include_space(X::MetricSpace, n::Integer)
 
-Include the pointcloud X of R^m into R^{m+n},
-with all extra coordinates equal 0.
+Include the metric space X of R^m into R^{m+n},
+with all extra coordinates equal to 0.
 
-Return a PointCloud.
+Returns a MetricSpace.
 """
-function include_space(
-    X::MetricSpace, n::Integer
-    )
+function include_space(X::MetricSpace, n::Integer)
     @assert n >= 0 "n must be non-negative"
-    vcat(M, zeros(n, size(X)[2]))
+    return vcat(X, zeros(n, size(X)[2]))
 end
 
 """
-    translation(X::PointCloud, vector::Union{Vector{<: Number}, Tuple})
-    
+    translate_space(X::MetricSpace, vector::Union{Vector{<:Number}, Tuple})
+
 Translate the space `X` by adding the `vector` to each point of X.
 
-Return a PointCloud.
+Returns a MetricSpace.
 """
-function translate_space(M::PointCloud, vector::Union{Vector{<: Number}, Tuple})
-    X .+ vector
+function translate_space(X::MetricSpace, vector::Union{Vector{<:Number}, Tuple})
+    return X .+ vector
 end

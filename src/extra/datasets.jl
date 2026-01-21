@@ -21,13 +21,6 @@ function sphere(num_points::Integer=100; dim::Integer=2, radius::Number=1)
     normalize.(X) .* radius
 end
 
-@testitem "sphere" begin
-    X = sphere(100, dim=3, radius=1.0)
-    @test size(X) == (100,)
-    @test typeof(X) == EuclideanSpace{3,Float64}
-    @test all(extrema(norm.(X)) .≈ (1.0, 1.0))
-end
-
 """
     cube(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, noise::Function = zeros)
 

@@ -6,7 +6,6 @@ using StatsBase: mean
 using ProgressMeter
 using StaticArrays
 using Graphs
-using TestItems
 
 export 
     mean;
@@ -53,8 +52,8 @@ export
 
 include("extra/filters.jl");
 export
-    distance_to_measure, 
-    excentricity;
+    distance_to_measure,
+    eccentricity;
 
 include("extra/datasets.jl");
 export 
@@ -63,9 +62,10 @@ export
     cube;
 
 include("extra/sampling.jl");
-export 
-    epsilon_net, 
-    farthest_points_sample, 
+export
+    epsilon_net,
+    farthest_points_sample_ids,
+    farthest_points_sample,
     random_sample;
 
 include("extra/nerve.jl");

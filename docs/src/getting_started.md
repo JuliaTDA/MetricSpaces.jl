@@ -169,7 +169,7 @@ Measure how "central" each point is:
 
 ```julia
 # Compute eccentricity for each point
-eccentricities = excentricity(X)
+eccentricities = eccentricity(X, X)
 println("Eccentricities: ", eccentricities[1:5])  # First 5 values
 
 # Find the most central point (minimum eccentricity)

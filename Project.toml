@@ -8,16 +8,21 @@ Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
-Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
-TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 
 [compat]
-julia = "1"
+julia = "1.8"
+Distances = "0.10"
+Graphs = "1.9"
+ProgressMeter = "1.7"
+StaticArrays = "1.5"
+StatsBase = "0.34"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Graphs"]

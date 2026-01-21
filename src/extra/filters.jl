@@ -37,21 +37,21 @@ end
 
 
 """
-    excentricity(X::S, Y::S; d=dist_euclidean) where {S <: MetricSpace{T}}
+    eccentricity(X::S, Y::S; d=dist_euclidean) where {S <: MetricSpace{T}}
 
-Computes the excentricity of the metric space `X` with respect to the metric space `Y`. The excentricity is defined as the mean of the pairwise distances between points in `X` and `Y`, using the provided distance function `d` (default is `dist_euclidean`).
+Computes the eccentricity of the metric space `X` with respect to the metric space `Y`. The eccentricity is defined as the mean of the pairwise distances between points in `X` and `Y`, using the provided distance function `d` (default is `dist_euclidean`).
 
 # Arguments
-- `X::S`: A metric space of type `S` containing the points to compute excentricity for.
+- `X::S`: A metric space of type `S` containing the points to compute eccentricity for.
 - `Y::S`: A metric space of type `S` containing the points to compute distances to.
 - `d`: A distance function to compute the distance between points in `X` and `Y`. Defaults to `dist_euclidean`.
 
 # Returns
-- A scalar value representing the excentricity of `X` with respect to `Y`.
+- A scalar value representing the eccentricity of `X` with respect to `Y`.
 
 # Notes
-- This function internally uses `pairwise_distance_summary` with the `mean` function to compute the excentricity.
+- This function internally uses `pairwise_distance_summary` with the `mean` function to compute the eccentricity.
 """
-function excentricity(X::S, Y::S; d = dist_euclidean) where {S <: MetricSpace{T} where {T}}
+function eccentricity(X::S, Y::S; d = dist_euclidean) where {S <: MetricSpace{T} where {T}}
     pairwise_distance_summary(X, Y, d, mean)
 end

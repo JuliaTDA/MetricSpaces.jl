@@ -37,13 +37,14 @@ ball_ids
 ```@docs
 k_neighbors
 distance_to_measure
-excentricity
+eccentricity
 ```
 
 ## Sampling Methods
 
 ```@docs
 epsilon_net
+farthest_points_sample_ids
 farthest_points_sample
 random_sample
 ```

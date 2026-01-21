@@ -132,13 +132,13 @@ println("Filtered from $(length(X_outliers)) to $(length(filtered_points)) point
 
 Measure how "central" each point is within the metric space.
 
-### `excentricity`
+### `eccentricity`
 
 ```julia
-excentricity(X::MetricSpace; d=dist_euclidean)
+eccentricity(X::MetricSpace, Y::MetricSpace; d=dist_euclidean)
 ```
 
-The eccentricity of a point is its maximum distance to any other point in the space.
+The eccentricity of each point in X is computed as the mean distance to all points in Y.
 
 **Example:**
 ```julia
@@ -149,7 +149,7 @@ mixed_data = vcat(center_points, boundary_points)
 X_mixed = EuclideanSpace(mixed_data)
 
 # Compute eccentricity
-eccentricities = excentricity(X_mixed)
+eccentricities = eccentricity(X_mixed, X_mixed)
 
 println("Eccentricity analysis:")
 println("Center points (first 5): ", round.(eccentricities[1:5], digits=3))
@@ -168,7 +168,7 @@ println("Most eccentric point: index $most_eccentric_idx, eccentricity $(round(e
 **Geometric Center Finding:**
 ```julia
 function find_geometric_center(X::EuclideanSpace)
-    ecc_values = excentricity(X)
+    ecc_values = eccentricity(X, X)
     center_idx = argmin(ecc_values)
     return center_idx, X[center_idx]
 end
@@ -180,7 +180,7 @@ println("Geometric center: $center_point at index $center_idx")
 **Boundary Detection:**
 ```julia
 function detect_boundary_points(X::EuclideanSpace, percentile=90)
-    ecc_values = excentricity(X)
+    ecc_values = eccentricity(X, X)
     threshold = quantile(ecc_values, percentile/100)
     boundary_indices = findall(x -> x >= threshold, ecc_values)
     return boundary_indices
@@ -441,7 +441,7 @@ Combine multiple neighborhood-based measures:
 function comprehensive_anomaly_detection(X::EuclideanSpace)
     # Compute multiple measures
     dtm_vals = distance_to_measure(X, 0.1)
-    ecc_vals = excentricity(X)
+    ecc_vals = eccentricity(X, X)
     
     # Local density (inverse of average k-NN distance)
     k = min(5, length(X) - 1)

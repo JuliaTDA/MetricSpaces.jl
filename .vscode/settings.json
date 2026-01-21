@@ -1,1 +1,4 @@
-{}
+{
+    "claudeCode.useCtrlEnterToSend": true,
+    "claudeCode.preferredLocation": "sidebar"
+}

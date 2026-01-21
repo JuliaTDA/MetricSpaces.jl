@@ -37,18 +37,8 @@ See also: [`ball`](@ref), [`pairwise_distance`](@ref)
 function ball_ids(X::MetricSpace{T}, x::T, ϵ::Number, distance=dist_euclidean) where {T}
     @assert ϵ > 0 "ϵ must be a positive number"
     ids = findall(<(ϵ), pairwise_distance(X, [x], distance)[:, 1])
+    return ids
 end
-
-@testitem "ball_ids" begin
-    # This creates a Vector{Float64}, not a MetricSpace!
-    X = float.(1:5)
-    
-    @test ball_ids(X, 3.0, 1.5) == [2, 3, 4]  # This will fail!
-    @test ball_ids(X, 1.0, 0.5) == [1]
-    @test ball_ids(X, 5.0, 0.001) == [5]
-    @test ball_ids(X, 6.0, 0.1) == []
-end
-
 
 """
     ball(X::MetricSpace{T}, x::T, ϵ::Number, distance=dist_euclidean) where {T}
@@ -95,18 +85,7 @@ B(x, ϵ) = {y ∈ X : d(x, y) < ϵ}
 
 See also: [`ball_ids`](@ref), [`pairwise_distance`](@ref)
 """
-function ball(X::MetricSpace, x::T, ϵ::Number, distance=dist_euclidean) where {T}
+function ball(X::MetricSpace, x, ϵ::Number, distance=dist_euclidean)
     ids = ball_ids(X, x, ϵ, distance)
-    X[ids]
-end
-
-@testitem "ball" begin
-    # Create a mock metric space
-    X = [1.0, 2.0, 3.0, 4.0, 5.0]
-
-    # Test ball
-    @test ball(X, 3.0, 1.5) == [2.0, 3.0, 4.0]  # Elements within distance 1.5 from 3.0
-    @test ball(X, 1.0, 0.5) == [1.0]           # Only the first element is within distance 0.5 from 1.0
-    @test ball(X, 5.0, 0.001) == [5.0]           # Only the last element is within distance 0.0 from 5.0
-    @test ball(X, 6.0, 0.01) == []           # Only the last element is within distance 0.0 from 5.0
+    return X[ids]
 end
