@@ -1,0 +1,38 @@
+/* Add any custom CSS styling here */
+:root {
+  --vp-c-brand-1: #646cff;
+  --vp-c-brand-2: #747bff;
+  --vp-c-brand-3: #535bf2;
+}
+
+/* Dark mode brand colors */
+.dark {
+  --vp-c-brand-1: #a855f7;
+  --vp-c-brand-2: #9333ea;
+  --vp-c-brand-3: #7c3aed;
+}
+
+/* Custom styling for code blocks */
+.vp-doc div[class*='language-'] {
+  margin: 16px 0;
+}
+
+/* Improve table styling */
+.vp-doc table {
+  display: block;
+  border-collapse: collapse;
+  margin: 20px 0;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: 1px solid var(--vp-c-divider);
+  padding: 8px 16px;
+}
+
+.vp-doc th {
+  background-color: var(--vp-c-bg-soft);
+  font-weight: 600;
+}
