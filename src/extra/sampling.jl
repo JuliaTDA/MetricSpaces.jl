@@ -9,19 +9,20 @@ Constructs an epsilon-net for a given metric space `X`. An epsilon-net is a subs
 - `X::MetricSpace`: The metric space containing the points.
 - `ϵ::Number`: The radius of the epsilon ball used to cover the points.
 - `d`: A distance function to compute pairwise distances. Defaults to `dist_euclidean`.
+- `show_progress::Bool=false`: Whether to display a progress bar.
 
 # Returns
 - `landmarks::Vector{Int}`: A vector of indices representing the selected landmarks.
 
 # Details
-The function iteratively selects points from `X` that are not yet covered by the epsilon balls of previously selected landmarks. It uses a progress meter to track the process and terminates when all points in `X` are covered.
+The function iteratively selects points from `X` that are not yet covered by the epsilon balls of previously selected landmarks. It terminates when all points in `X` are covered.
 """
-function epsilon_net(X::MetricSpace, ϵ::Number; d=dist_euclidean)
+function epsilon_net(X::MetricSpace, ϵ::Number; d=dist_euclidean, show_progress::Bool=false)
 
     covered = repeat([0], length(X))
     landmarks = Int[]
 
-    prog = ProgressUnknown("Searching neighborhood of point number")
+    prog = ProgressUnknown("Searching neighborhood of point number"; enabled=show_progress)
 
     while true
 
@@ -61,6 +62,7 @@ maximizing the minimum distance to previously selected points.
 - `X::MetricSpace`: The input metric space to sample from
 - `n::Integer`: Number of points to sample
 - `d`: Distance function to use (default: euclidean)
+- `show_progress::Bool=false`: Whether to display a progress bar.
 
 # Returns
 - Vector of `n` indices representing the sampled points
@@ -85,7 +87,7 @@ The algorithm works as follows:
 # Complexity
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
-function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean)
+function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean, show_progress::Bool=false)
     length(X) < n && return [1:length(X);]
 
     ids = zeros(Int, n)
@@ -97,7 +99,8 @@ function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean
 
     common_max_distance = pairwise_distance([p_0], X, d)[1, :]
 
-    @showprogress for i in 2:n
+    p = Progress(n - 1; enabled=show_progress)
+    for i in 2:n
         p_i = X[ids[i-1]]
 
         d_i = pairwise_distance([p_i], X, d)[1, :]
@@ -105,6 +108,7 @@ function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean
         common_max_distance = min.(common_max_distance, d_i)
 
         ids[i] = findmax(common_max_distance)[2]
+        next!(p)
     end
 
     return ids
@@ -122,6 +126,7 @@ resulting in a well-distributed subset of points from the original space.
 - `X::MetricSpace`: The input metric space to sample from
 - `n::Integer`: Number of points to sample
 - `d`: Distance function to use (defaults to euclidean distance)
+- `show_progress::Bool=false`: Whether to display a progress bar.
 
 # Returns
 - A subset of `n` points from `X` that are approximately maximally distant from each other
@@ -142,8 +147,8 @@ The algorithm works as follows:
 # Complexity
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
-function farthest_points_sample(X::MetricSpace, n::Integer; d=dist_euclidean)
-    ids = farthest_points_sample_ids(X, n; d=d)
+function farthest_points_sample(X::MetricSpace, n::Integer; d=dist_euclidean, show_progress::Bool=false)
+    ids = farthest_points_sample_ids(X, n; d=d, show_progress=show_progress)
     return X[ids]
 end
 
