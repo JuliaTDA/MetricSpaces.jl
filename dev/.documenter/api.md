@@ -12,7 +12,7 @@ Complete reference for all exported functions and types in MetricSpaces.jl.
 The abstract Metric Space type is just an alias for Vector{T}.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/types.jl#L4-L7" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/types.jl#L4-L7" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -24,7 +24,7 @@ The abstract Metric Space type is just an alias for Vector{T}.
 A type to model metric spaces where each element is an array of the same length.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/types.jl#L9-L11" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/types.jl#L9-L11" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -41,7 +41,7 @@ as_matrix(X::EuclideanSpace)
 Convert an Euclidean space into a matrix.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/types.jl#L65-L69" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/types.jl#L65-L69" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -53,7 +53,7 @@ Convert an Euclidean space into a matrix.
 A vector of integers, generally interpreted as  indexes of a metric space.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/types.jl#L76-L79" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/types.jl#L76-L79" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -65,7 +65,7 @@ A vector of integers, generally interpreted as  indexes of a metric space.
 A covering is a vector of metric spaces, where each metric space is a subset of the original metric space `X`.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/types.jl#L88-L91" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/types.jl#L88-L91" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -90,6 +90,8 @@ Compute the pairwise distances between all elements of metric spaces `M` and `N`
   
 - `d`: A function that computes the distance between two elements.
   
+- `show_progress::Bool=false`: Whether to display a progress bar.
+  
 
 **Returns**
 - A matrix of size `length(M) × length(N)` where the entry `(i, j)` contains the distance `d(M[i], N[j])`.
@@ -98,11 +100,11 @@ Compute the pairwise distances between all elements of metric spaces `M` and `N`
 **Notes**
 - The computation is parallelized across threads for improved performance.
   
-- Progress is displayed using a progress bar.
+- Progress is optionally displayed using a progress bar (disabled by default).
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/distances.jl#L1-L17" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/distances.jl#L1-L18" target="_blank" rel="noreferrer">source</a></Badge>
 
 
 
@@ -120,6 +122,8 @@ Compute the pairwise distances between all elements in the collections `M` and `
   
 - `d::Metric`: A metric function to compute the distance between points.
   
+- `show_progress::Bool=false`: Whether to display a progress bar.
+  
 
 **Returns**
 - `s::Matrix{Float64}`: A matrix where the entry `s[i, j]` contains the distance between `M[i]` and `N[j]`.
@@ -128,13 +132,13 @@ Compute the pairwise distances between all elements in the collections `M` and `
 **Notes**
 - The computation is parallelized across threads for efficiency.
   
-- Progress is displayed using a progress bar.
+- Progress is optionally displayed using a progress bar (disabled by default).
   
 - The function assumes that `M` and `N` are compatible with the provided metric and space type.
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/distances.jl#L36-L53" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/distances.jl#L37-L55" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -159,6 +163,8 @@ Compute a summary statistic of pairwise distances between each element of metric
   
 - `summary_function`: (Optional) A function to summarize the distances for each element of `M` (default is `mean`).
   
+- `show_progress::Bool=false`: Whether to display a progress bar.
+  
 
 **Returns**
 - `s`: An array where each entry `s[i]` contains the summary statistic (e.g., mean) of the distances from the `i`-th element of `M` to all elements of `N`.
@@ -167,11 +173,11 @@ Compute a summary statistic of pairwise distances between each element of metric
 **Notes**
 - The computation is parallelized using threads for improved performance.
   
-- Progress is displayed using a progress bar.
+- Progress is optionally displayed using a progress bar (disabled by default).
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/distances.jl#L70-L87" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/distances.jl#L72-L90" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -188,7 +194,7 @@ Euclidean norm.
 
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/norm.jl#L2-L4" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/norm.jl#L2-L4" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -257,7 +263,7 @@ For a metric space (X, d) and point x ∈ X, the open ball of radius ϵ is: B(x,
 See also: [`ball_ids`](/api#MetricSpaces.ball_ids), [`pairwise_distance`](/api#MetricSpaces.pairwise_distance)
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/ball.jl#L43-L87" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/ball.jl#L43-L87" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -314,7 +320,7 @@ ball_ids(X, [3.0], 1.5, dist_cityblock)
 See also: [`ball`](/api#MetricSpaces.ball), [`pairwise_distance`](/api#MetricSpaces.pairwise_distance)
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/base/ball.jl#L1-L36" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/base/ball.jl#L1-L36" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -351,7 +357,7 @@ Finds the `k` nearest neighbors of a given point `x` in the metric space `X`.
 This function internally uses `k_neighbors_ids` to retrieve the indices of the nearest neighbors and then returns the corresponding elements from `X`.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/neighborhood.jl#L28-L44" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/neighborhood.jl#L28-L44" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -390,7 +396,7 @@ Computes a measure of distance from each point in the metric space `X` to the me
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/filters.jl#L1-L20" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/filters.jl#L1-L20" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -423,7 +429,7 @@ Computes the eccentricity of the metric space `X` with respect to the metric spa
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/filters.jl#L39-L54" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/filters.jl#L39-L54" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -448,6 +454,8 @@ Constructs an epsilon-net for a given metric space `X`. An epsilon-net is a subs
   
 - `d`: A distance function to compute pairwise distances. Defaults to `dist_euclidean`.
   
+- `show_progress::Bool=false`: Whether to display a progress bar.
+  
 
 **Returns**
 - `landmarks::Vector{Int}`: A vector of indices representing the selected landmarks.
@@ -455,10 +463,10 @@ Constructs an epsilon-net for a given metric space `X`. An epsilon-net is a subs
 
 **Details**
 
-The function iteratively selects points from `X` that are not yet covered by the epsilon balls of previously selected landmarks. It uses a progress meter to track the process and terminates when all points in `X` are covered.
+The function iteratively selects points from `X` that are not yet covered by the epsilon balls of previously selected landmarks. It terminates when all points in `X` are covered.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/sampling.jl#L3-L18" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/sampling.jl#L3-L19" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -482,6 +490,8 @@ The algorithm works by iteratively selecting points that are farthest from the a
 - `n::Integer`: Number of points to sample
   
 - `d`: Distance function to use (default: euclidean)
+  
+- `show_progress::Bool=false`: Whether to display a progress bar.
   
 
 **Returns**
@@ -521,7 +531,7 @@ The algorithm works as follows:
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/sampling.jl#L52-L87" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/sampling.jl#L53-L89" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -545,6 +555,8 @@ This method iteratively selects points that are farthest from the already select
 - `n::Integer`: Number of points to sample
   
 - `d`: Distance function to use (defaults to euclidean distance)
+  
+- `show_progress::Bool=false`: Whether to display a progress bar.
   
 
 **Returns**
@@ -576,7 +588,7 @@ The algorithm works as follows:
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/sampling.jl#L113-L144" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/sampling.jl#L117-L149" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -611,7 +623,7 @@ sampled_points = random_sample(X, 10)
 
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/sampling.jl#L150-L167" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/sampling.jl#L155-L172" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -653,7 +665,7 @@ sphere(100, dim=3, radius=2.0, noise=randn)
 end
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/datasets.jl#L1-L18" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/datasets.jl#L1-L18" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -676,7 +688,7 @@ torus(num_points::Integer = 100; r::Number = 1, R::Number = 3)
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/datasets.jl#L51-L58" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/datasets.jl#L51-L58" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -709,7 +721,7 @@ Create a cube in R^(`dim`) with `num_points` points and radius `radius`.
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/datasets.jl#L24-L40" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/datasets.jl#L24-L40" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
@@ -738,7 +750,7 @@ Each element of the covering corresponds to a node in the graph. An edge is adde
   
 
 
-<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/4f28da04fdf48211f77f3755be12b09cd4bf8591/src/extra/nerve.jl#L1-L14" target="_blank" rel="noreferrer">source</a></Badge>
+<Badge type="info" class="source-link" text="source"><a href="https://github.com/JuliaTDA/MetricSpaces.jl/blob/1fa6fbd1df9cdd70695b3fd2f4b425f7a492e1cb/src/extra/nerve.jl#L1-L14" target="_blank" rel="noreferrer">source</a></Badge>
 
 </details>
 
