@@ -1,7 +1,7 @@
 name = "MetricSpaces"
 uuid = "737298cd-3e4b-40c4-a4ce-863151543a8d"
 authors = ["G. Vituri <56522687+vituri@users.noreply.github.com> and contributors"]
-version = "0.0.1"
+version = "0.1.0"
 
 [deps]
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
