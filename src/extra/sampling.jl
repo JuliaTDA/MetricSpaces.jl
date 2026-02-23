@@ -88,30 +88,70 @@ The algorithm works as follows:
 The algorithm runs in O(kN) time, where k is the number of points to sample and N is the total number of points in `X`.
 """
 function farthest_points_sample_ids(X::MetricSpace, n::Integer; d=dist_euclidean, show_progress::Bool=false)
-    length(X) < n && return [1:length(X);]
+    n <= 0 && return Int[]
 
-    ids = zeros(Int, n)
-    ids[1] = rand(1:length(X))
+    m = length(X)
+    m < n && return collect(1:m)
 
+    ids = Vector{Int}(undef, n)
+    ids[1] = rand(1:m)
     n == 1 && return ids
 
-    p_0 = X[ids[1]]
+    first_point = @inbounds X[ids[1]]
 
-    common_max_distance = pairwise_distance([p_0], X, d)[1, :]
+    min_dists = Vector{typeof(d(first_point, first_point))}(undef, m)
+    selected = falses(m)
+    selected[ids[1]] = true
+
+    @inbounds for j in 1:m
+        min_dists[j] = d(first_point, X[j])
+    end
 
     p = Progress(n - 1; enabled=show_progress)
-    for i in 2:n
-        p_i = X[ids[i-1]]
 
-        d_i = pairwise_distance([p_i], X, d)[1, :]
+    # Pick the farthest point from the first sampled point.
+    max_id = 0
+    max_val = zero(eltype(min_dists))
+    @inbounds for j in 1:m
+        d_j = min_dists[j]
+        if !selected[j] && (max_id == 0 || d_j > max_val)
+            max_id = j
+            max_val = d_j
+        end
+    end
+    ids[2] = max_id
+    selected[max_id] = true
+    last_id = max_id
+    next!(p)
 
-        common_max_distance = min.(common_max_distance, d_i)
+    for i in 3:n
+        p_i = @inbounds X[last_id]
 
-        ids[i] = findmax(common_max_distance)[2]
+        max_id = 0
+        max_val = zero(eltype(min_dists))
+
+        @inbounds for j in 1:m
+            d_ij = d(p_i, X[j])
+
+            cur = min_dists[j]
+            if d_ij < cur
+                cur = d_ij
+                min_dists[j] = cur
+            end
+
+            if !selected[j] && (max_id == 0 || cur > max_val)
+                max_id = j
+                max_val = cur
+            end
+        end
+
+        ids[i] = max_id
+        selected[max_id] = true
+        last_id = max_id
         next!(p)
     end
 
-    return ids
+    ids
 end
 
 """
