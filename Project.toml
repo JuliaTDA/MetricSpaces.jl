@@ -4,7 +4,9 @@ version = "0.2.0"
 authors = ["G. Vituri <56522687+vituri@users.noreply.github.com> and contributors"]
 
 [deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 OhMyThreads = "67456a42-1dca-4109-a031-0a68de7e3ad5"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"

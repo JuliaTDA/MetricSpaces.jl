@@ -56,11 +56,7 @@ export
     distance_to_measure,
     eccentricity;
 
-include("extra/datasets.jl");
-export 
-    sphere,
-    torus,
-    cube;
+include("extra/datasets/datasets.jl");
 
 include("extra/sampling.jl");
 export
