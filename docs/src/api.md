@@ -9,7 +9,9 @@ MetricSpace
 EuclideanSpace
 as_matrix
 SubsetIndex
-Covering
+CoveringIndices
+Interval
+IntervalCovering
 ```
 
 ## Distance Functions
@@ -36,8 +38,10 @@ ball_ids
 
 ```@docs
 k_neighbors
+k_neighbors_ids
 distance_to_measure
 eccentricity
+is_not_disjoint
 ```
 
 ## Sampling Methods
