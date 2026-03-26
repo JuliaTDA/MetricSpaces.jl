@@ -19,20 +19,73 @@ Computes a measure of distance from each point in the metric space `X` to the me
 
 """
 function distance_to_measure(
-    X::S, Y::S; 
-    d = dist_euclidean
-    ,k::Integer = 5
-    ,summary_function = maximum
-    ) where {S <: MetricSpace{T} where {T}}
+    X::S, Y::S;
+    d=dist_euclidean,
+    k::Integer=5,
+    summary_function=maximum,
+) where {S <: MetricSpace{T} where {T}}
+    @assert k > 0 "k must be a positive integer"
 
-    s = zeros(length(X))
+    m = length(X)
+    n = length(Y)
+    s = zeros(m)
 
-    Threads.@threads for (i, x) ∈ collect(enumerate(X))
-        ds = sort(pairwise_distance([x], Y, d)[1, :])[1:min(end, k)]
-        @inbounds s[i] = summary_function(ds)
+    if n == 0
+        empty_vals = Float64[]
+        @inbounds for i ∈ 1:m
+            s[i] = summary_function(empty_vals)
+        end
+        return s
     end
 
-    return s
+    k_eff = min(n, Int(k))
+
+    if nthreads() == 1
+        @inbounds for i ∈ 1:m
+            s[i] = _k_neighbors_summary(X[i], Y, d, k_eff, summary_function)
+        end
+    else
+        tforeach(1:m; scheduler=:dynamic) do i
+            @inbounds s[i] = _k_neighbors_summary(X[i], Y, d, k_eff, summary_function)
+        end
+    end
+
+    s
+end
+
+function _k_neighbors_summary(x, Y::MetricSpace, d, k::Int, summary_function)
+    n = length(Y)
+    if k <= 32
+        best = fill(Inf, k)
+        max_idx = 1
+        max_val = best[1]
+        @inbounds for j ∈ 1:n
+            dist = d(x, Y[j])
+            if dist < max_val
+                best[max_idx] = dist
+
+                max_idx = 1
+                max_val = best[1]
+                for r ∈ 2:k
+                    v = best[r]
+                    if v > max_val
+                        max_idx = r
+                        max_val = v
+                    end
+                end
+            end
+        end
+
+        sort!(best)
+        return summary_function(best)
+    end
+
+    vals = Vector{Float64}(undef, n)
+    @inbounds for j ∈ 1:n
+        vals[j] = d(x, Y[j])
+    end
+    partialsort!(vals, 1:k)
+    summary_function(@view vals[1:k])
 end
 
 
