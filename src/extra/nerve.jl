@@ -17,9 +17,7 @@ function nerve_1d(C::Vector)
     g = Graph(n)
     
     for i ∈ 1:n
-        for j ∈ i:n
-            i == j && continue
-
+        for j ∈ (i + 1):n
             if !isdisjoint(C[i], C[j])
                 add_edge!(g, i, j)
             end
