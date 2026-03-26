@@ -33,7 +33,7 @@ function epsilon_net(X::MetricSpace, ϵ::Number; d=dist_euclidean, show_progress
         push!(landmarks, id_center)
 
         # get the elements currently covered by the epsilon ball around the current_center
-        currently_covered = ball(X, id_center, ϵ) #findall(<(ϵ), pairwise_distance([x], X, d)[1, :]) 
+        currently_covered = ball_ids(X, X[id_center], ϵ, d)
 
         # update the covered indexes
         covered[currently_covered] .= 1
