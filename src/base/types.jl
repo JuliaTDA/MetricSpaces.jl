@@ -85,8 +85,3 @@ of a given metric space `X`.
 """
 CoveringIndices = Vector{<:SubsetIndex}
 
-"""
-A covering is a vector of metric spaces,
-where each metric space is a subset of the original metric space `X`.
-"""
-Covering = Vector{<:MetricSpace}
