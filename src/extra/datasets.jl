@@ -40,12 +40,15 @@ Create a cube in R^(`dim`) with `num_points` points and radius `radius`.
 """
 function cube(num_points::Integer=100; dim::Integer=2, radius::Number=1, noise::Function=zeros)
     X = rand(dim, num_points) .- 0.5
-    X = mapslices(X, dims=1) do x
-        y = x ./ norm(x) .* radius + noise(dim)
-        return y
+
+    @inbounds for j ∈ axes(X, 2)
+        col = view(X, :, j)
+        col ./= norm(col)
+        col .*= radius
+        col .+= noise(dim)
     end
 
-    return EuclideanSpace(X)
+    EuclideanSpace(X)
 end
 
 """
