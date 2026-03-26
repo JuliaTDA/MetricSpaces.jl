@@ -36,8 +36,14 @@ See also: [`ball`](@ref), [`pairwise_distance`](@ref)
 """
 function ball_ids(X::MetricSpace{T}, x::T, ϵ::Number, distance=dist_euclidean) where {T}
     @assert ϵ > 0 "ϵ must be a positive number"
-    ids = findall(<(ϵ), pairwise_distance(X, [x], distance)[:, 1])
-    return ids
+    ids = Int[]
+    sizehint!(ids, length(X))
+
+    @inbounds for i ∈ eachindex(X)
+        distance(X[i], x) < ϵ && push!(ids, i)
+    end
+
+    ids
 end
 
 """
