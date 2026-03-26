@@ -70,8 +70,11 @@ export
     random_sample;
 
 include("extra/nerve.jl");
-export 
-    nerve_1d;
+export
+    nerve_1d,
+    min_intersection,
+    percentage_intersection,
+    jaccard_threshold;
 
 # include("maps.jl");
 # export include_space, 
