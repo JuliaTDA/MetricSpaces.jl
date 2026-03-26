@@ -19,8 +19,21 @@ Finds the indices of the `k` nearest neighbors of a point `x` in the metric spac
 """
 k_neighbors_ids = function (X::MetricSpace{T}, x::T, k::Int, d=dist_euclidean) where {T}
     @assert k > 0 "k must be a positive integer"
-    dists = pairwise_distance([x], X, d)
-    ids = partialsortperm(dists, k=1:min(length(dists), k))
+    m = length(X)
+    m == 0 && return Int[]
+
+    dists = Vector{Float64}(undef, m)
+    if nthreads() == 1
+        @inbounds for i ∈ 1:m
+            dists[i] = d(x, X[i])
+        end
+    else
+        tforeach(1:m; scheduler=:dynamic) do i
+            @inbounds dists[i] = d(x, X[i])
+        end
+    end
+
+    ids = partialsortperm(dists, 1:min(m, k))
 
     ids
 end
