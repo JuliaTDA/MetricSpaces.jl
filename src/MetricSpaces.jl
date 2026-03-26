@@ -2,6 +2,7 @@ module MetricSpaces
 
 using Distances
 using Base.Threads
+using OhMyThreads
 using StatsBase: mean
 using ProgressMeter
 using StaticArrays
@@ -16,7 +17,7 @@ export
     EuclideanSpace,
     as_matrix,
     SubsetIndex,
-    Covering;
+    CoveringIndices;
 
 include("base/real.jl");
 export Interval,

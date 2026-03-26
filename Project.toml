@@ -1,28 +1,30 @@
 name = "MetricSpaces"
 uuid = "737298cd-3e4b-40c4-a4ce-863151543a8d"
+version = "0.2.0"
 authors = ["G. Vituri <56522687+vituri@users.noreply.github.com> and contributors"]
-version = "0.1.0"
 
 [deps]
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+OhMyThreads = "67456a42-1dca-4109-a031-0a68de7e3ad5"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
-julia = "1.8"
 Distances = "0.10"
 Graphs = "1.9"
+OhMyThreads = "0.8.5"
 ProgressMeter = "1.7"
 StaticArrays = "1.5"
-StatsBase = "0.34"
+StatsBase = "0.33, 0.34"
+julia = "1.8"
 
 [extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Test", "Graphs"]
