@@ -85,4 +85,61 @@ using MetricSpaces.Datasets
         @test length(X) == 10
         @test typeof(X) == EuclideanSpace{10,Float64}
     end
+
+    @testset "swiss_roll" begin
+        X = swiss_roll(100)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{3,Float64}
+    end
+
+    @testset "annulus" begin
+        X = annulus(100, r=0.5, R=1.0)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{2,Float64}
+        norms = norm.(X)
+        @test all(n -> 0.5 <= n <= 1.0, norms)
+    end
+
+    @testset "ellipse" begin
+        X = ellipse(100, a=2.0, b=1.0)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{2,Float64}
+    end
+
+    @testset "spiral" begin
+        X = spiral(100, n_turns=3)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{2,Float64}
+    end
+
+    @testset "figure_eight" begin
+        X = figure_eight(100)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{2,Float64}
+    end
+
+    @testset "klein_bottle" begin
+        X = klein_bottle(100)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{4,Float64}
+    end
+
+    @testset "mobius_strip" begin
+        X = mobius_strip(100)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{3,Float64}
+    end
+
+    @testset "clifford_torus" begin
+        X = clifford_torus(100)
+        @test length(X) == 100
+        @test typeof(X) == EuclideanSpace{4,Float64}
+    end
+
+    @testset "add_noise" begin
+        X = sphere(100, dim=2, radius=1.0)
+        Y = add_noise(X, 0.01)
+        @test length(Y) == 100
+        @test typeof(Y) == EuclideanSpace{2,Float64}
+    end
 end
