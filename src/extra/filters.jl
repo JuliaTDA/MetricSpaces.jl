@@ -108,3 +108,158 @@ Computes the eccentricity of the metric space `X` with respect to the metric spa
 function eccentricity(X::S, Y::S; d = dist_euclidean) where {S <: MetricSpace{T} where {T}}
     pairwise_distance_summary(X, Y, d, mean)
 end
+
+
+"""
+    knn_density(X::MetricSpace; d=dist_euclidean, k::Integer=5)
+
+Estimate the density at each point in `X` using the k-nearest neighbor method.
+For each point, the density is proportional to `k / r_k^dim`, where `r_k` is the
+distance to the k-th nearest neighbor (excluding self) and `dim` is the ambient
+dimension inferred from the data.
+
+# Arguments
+- `X::MetricSpace`: The metric space to estimate density for.
+- `d`: Distance function. Defaults to `dist_euclidean`.
+- `k::Integer`: Number of nearest neighbors. Defaults to `5`.
+
+# Returns
+- A `Vector{Float64}` of density estimates, one per point in `X`.
+"""
+function knn_density(
+    X::MetricSpace;
+    d=dist_euclidean,
+    k::Integer=5,
+)
+    @assert k > 0 "k must be a positive integer"
+    m = length(X)
+    @assert m > 1 "X must have at least 2 points"
+
+    # k+1 because distance_to_measure includes self (distance 0)
+    k_eff = min(m, k + 1)
+    dtm = distance_to_measure(X, X; d=d, k=k_eff, summary_function=maximum)
+
+    # Infer ambient dimension from data
+    dim = length(X[1])
+
+    densities = zeros(m)
+    @inbounds for i in 1:m
+        r = dtm[i]
+        densities[i] = r > 0 ? k / r^dim : Inf
+    end
+
+    densities
+end
+
+
+"""
+    dtm_density(X::MetricSpace; d=dist_euclidean, k::Integer=5)
+
+Estimate the density at each point in `X` using the distance-to-measure (DTM).
+The density is computed as the inverse of `distance_to_measure(X, X; k=k)`.
+This is more robust to outliers than `knn_density`.
+
+# Arguments
+- `X::MetricSpace`: The metric space to estimate density for.
+- `d`: Distance function. Defaults to `dist_euclidean`.
+- `k::Integer`: Number of nearest neighbors for DTM. Defaults to `5`.
+
+# Returns
+- A `Vector{Float64}` of density estimates, one per point in `X`.
+"""
+function dtm_density(
+    X::MetricSpace;
+    d=dist_euclidean,
+    k::Integer=5,
+)
+    @assert k > 0 "k must be a positive integer"
+    @assert length(X) > 0 "X must be non-empty"
+
+    dtm = distance_to_measure(X, X; d=d, k=k, summary_function=mean)
+
+    densities = similar(dtm)
+    @inbounds for i in eachindex(dtm)
+        densities[i] = dtm[i] > 0 ? 1.0 / dtm[i] : Inf
+    end
+
+    densities
+end
+
+
+"""
+    kde(X::MetricSpace; d=dist_euclidean, bandwidth=nothing, kernel=nothing)
+    kde(X::MetricSpace, Y::MetricSpace; d=dist_euclidean, bandwidth=nothing, kernel=nothing)
+
+Kernel density estimation on a metric space. Evaluates the density at each point
+in `X` (single-argument form) or at each point in `Y` using `X` as the data
+(two-argument form).
+
+The density at a point `y` is: `(1/n) * Σ kernel(d(y, x) / bandwidth)` for `x ∈ X`.
+
+# Arguments
+- `X::MetricSpace`: The data points.
+- `Y::MetricSpace`: (optional) Points at which to evaluate the density. Defaults to `X`.
+- `d`: Distance function. Defaults to `dist_euclidean`.
+- `bandwidth`: Kernel bandwidth. If `nothing`, uses a heuristic based on the median
+  pairwise nearest-neighbor distance.
+- `kernel`: A function `ℝ → ℝ` applied to scaled distances. Defaults to the Gaussian
+  kernel `t -> exp(-t^2 / 2)`.
+
+# Returns
+- A `Vector{Float64}` of density estimates.
+"""
+function kde(
+    X::MetricSpace;
+    d=dist_euclidean,
+    bandwidth=nothing,
+    kernel=nothing,
+)
+    kde(X, X; d=d, bandwidth=bandwidth, kernel=kernel)
+end
+
+function kde(
+    X::S, Y::S;
+    d=dist_euclidean,
+    bandwidth=nothing,
+    kernel=nothing,
+) where {S <: MetricSpace{T} where {T}}
+    n = length(X)
+    m = length(Y)
+    @assert n > 0 "X must be non-empty"
+    @assert m > 0 "Y must be non-empty"
+
+    if isnothing(kernel)
+        kernel = t -> exp(-t^2 / 2)
+    end
+
+    if isnothing(bandwidth)
+        # Heuristic: median nearest-neighbor distance
+        nn_dists = distance_to_measure(X, X; d=d, k=2, summary_function=maximum)
+        bandwidth = median(nn_dists)
+        if bandwidth ≈ 0
+            bandwidth = 1.0
+        end
+    end
+
+    densities = zeros(m)
+
+    if nthreads() == 1
+        @inbounds for i in 1:m
+            s = 0.0
+            for j in 1:n
+                s += kernel(d(Y[i], X[j]) / bandwidth)
+            end
+            densities[i] = s / n
+        end
+    else
+        tforeach(1:m; scheduler=:dynamic) do i
+            s = 0.0
+            @inbounds for j in 1:n
+                s += kernel(d(Y[i], X[j]) / bandwidth)
+            end
+            @inbounds densities[i] = s / n
+        end
+    end
+
+    densities
+end
