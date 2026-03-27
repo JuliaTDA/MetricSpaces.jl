@@ -96,3 +96,74 @@ function star(num_points::Integer=100; n_arms::Integer=5, dim::Integer=2)
 
     EuclideanSpace(M)
 end
+
+"""
+    swiss_roll(num_points::Integer = 100; noise::Number = 0.0)
+
+Generate points on a Swiss roll manifold in 3D.
+
+The Swiss roll is a classic manifold learning benchmark where PCA fails
+but nonlinear methods (Mapper, Isomap) succeed.
+"""
+function swiss_roll(num_points::Integer=100; noise::Number=0.0)
+    t = 3π / 2 .* (1 .+ 2 .* rand(num_points))
+    h = 20 .* rand(num_points)
+
+    x = @. t * cos(t) + noise * randn()
+    y = h
+    z = @. t * sin(t) + noise * randn()
+
+    EuclideanSpace(permutedims([x y z], [2, 1]))
+end
+
+"""
+    annulus(num_points::Integer = 100; r::Number = 0.5, R::Number = 1.0)
+
+Generate points uniformly distributed in an annulus (ring) in 2D.
+
+# Arguments
+- `r`: inner radius
+- `R`: outer radius
+"""
+function annulus(num_points::Integer=100; r::Number=0.5, R::Number=1.0)
+    θ = rand(num_points) .* 2π
+    radii = sqrt.(r^2 .+ rand(num_points) .* (R^2 - r^2))
+
+    x = @. radii * cos(θ)
+    y = @. radii * sin(θ)
+
+    EuclideanSpace(permutedims([x y], [2, 1]))
+end
+
+"""
+    ellipse(num_points::Integer = 100; a::Number = 1.0, b::Number = 0.5)
+
+Generate points on an ellipse in 2D.
+
+# Arguments
+- `a`: semi-major axis
+- `b`: semi-minor axis
+"""
+function ellipse(num_points::Integer=100; a::Number=1.0, b::Number=0.5)
+    θ = rand(num_points) .* 2π
+
+    x = @. a * cos(θ)
+    y = @. b * sin(θ)
+
+    EuclideanSpace(permutedims([x y], [2, 1]))
+end
+
+"""
+    spiral(num_points::Integer = 100; n_turns::Number = 3)
+
+Generate points on an Archimedean spiral in 2D.
+Density varies along the curve (sparser at the outer edge).
+"""
+function spiral(num_points::Integer=100; n_turns::Number=3)
+    t = sort(rand(num_points)) .* n_turns .* 2π
+
+    x = @. t * cos(t)
+    y = @. t * sin(t)
+
+    EuclideanSpace(permutedims([x y], [2, 1]))
+end
