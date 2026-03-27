@@ -3,7 +3,7 @@ module MetricSpaces
 using Distances
 using Base.Threads
 using OhMyThreads
-using StatsBase: mean
+using StatsBase: mean, median
 using ProgressMeter
 using StaticArrays
 using Graphs
@@ -42,10 +42,14 @@ export
     ball_ids;
 
 include("base/distance functions.jl");
-export 
+export
     dist_euclidean,
     dist_cityblock,
-    dist_chebyshev;
+    dist_chebyshev,
+    dist_cosine,
+    dist_hamming,
+    dist_correlation,
+    dist_minkowski;
 
 include("extra/neighborhood.jl");
 export 
@@ -54,7 +58,10 @@ export
 include("extra/filters.jl");
 export
     distance_to_measure,
-    eccentricity;
+    eccentricity,
+    knn_density,
+    dtm_density,
+    kde;
 
 include("extra/datasets/datasets.jl");
 
