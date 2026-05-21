@@ -13,4 +13,5 @@ using Graphs: nv, ne, has_edge
     include("test_datasets.jl")
     include("test_sampling.jl")
     include("test_nerve.jl")
+    include("test_transformations.jl")
 end

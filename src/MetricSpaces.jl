@@ -79,8 +79,13 @@ export
     percentage_intersection,
     jaccard_threshold;
 
-# include("maps.jl");
-# export include_space, 
-#     translate_space;
+include("extra/transformations.jl");
+export
+    include_space,
+    translate_space,
+    center,
+    scale,
+    standardize,
+    embed;
 
 end
