@@ -89,4 +89,7 @@ export
     standardize,
     embed;
 
+include("extra/geodesic.jl");
+export geodesic_distance;
+
 end

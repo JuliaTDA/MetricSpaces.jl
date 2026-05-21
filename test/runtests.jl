@@ -14,4 +14,5 @@ using Graphs: nv, ne, has_edge
     include("test_sampling.jl")
     include("test_nerve.jl")
     include("test_transformations.jl")
+    include("test_geodesic.jl")
 end
