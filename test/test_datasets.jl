@@ -142,4 +142,24 @@ using MetricSpaces.Datasets
         @test length(Y) == 100
         @test typeof(Y) == EuclideanSpace{2,Float64}
     end
+
+    @testset "projective_plane" begin
+        X = projective_plane(150)
+        @test length(X) == 150
+        @test typeof(X) == EuclideanSpace{4,Float64}
+    end
+
+    @testset "interlocked_tori" begin
+        X = interlocked_tori(100)
+        @test length(X) == 200    # two tori, 100 points each
+        @test typeof(X) == EuclideanSpace{3,Float64}
+    end
+
+    if haskey(ENV, "RUN_NETWORK_TESTS") && ENV["RUN_NETWORK_TESTS"] == "1"
+        @testset "stanford_bunny" begin
+            X = stanford_bunny()
+            @test length(X) > 0
+            @test typeof(X) == EuclideanSpace{3,Float64}
+        end
+    end
 end
