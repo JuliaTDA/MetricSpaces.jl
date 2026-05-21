@@ -75,6 +75,7 @@ export
 include("extra/nerve.jl");
 export
     nerve_1d,
+    nerve_2d,
     min_intersection,
     percentage_intersection,
     jaccard_threshold;

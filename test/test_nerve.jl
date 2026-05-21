@@ -111,4 +111,29 @@
         g_empty = nerve_1d([Int[], Int[]], jaccard_threshold(0.0))
         @test ne(g_empty) == 0  # union_size == 0, returns false
     end
+
+    @testset "nerve_2d basic" begin
+        # Cover with 4 sets containing 4 or 5 in triple intersections:
+        #   {1,2,3,4} ∩ {3,4,5} ∩ {4,5,6} = {4} → triangle (1,2,3)
+        #   {3,4,5}   ∩ {4,5,6} ∩ {5,6,7} = {5} → triangle (2,3,4)
+        C = [[1, 2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7]]
+        result = nerve_2d(C)
+        @test Set(result.triangles) == Set([(1, 2, 3), (2, 3, 4)])
+        @test ne(result.graph) >= 3   # at least the 3 edges in each triangle
+    end
+
+    @testset "nerve_2d disjoint cover" begin
+        C = [[1, 2], [3, 4], [5, 6]]
+        result = nerve_2d(C)
+        @test isempty(result.triangles)
+        @test ne(result.graph) == 0
+    end
+
+    @testset "nerve_2d pairwise but no triple intersection" begin
+        # Each pair overlaps, but no element is in all three
+        C = [[1, 2], [2, 3], [1, 3]]
+        result = nerve_2d(C)
+        @test isempty(result.triangles)
+        @test ne(result.graph) == 3
+    end
 end

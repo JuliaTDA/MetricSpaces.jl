@@ -107,3 +107,42 @@ function jaccard_threshold(t::Real)
         union_size == 0 ? false : inter / union_size >= t
     end
 end
+
+"""
+    nerve_2d(C::Vector) -> NamedTuple{(:graph, :triangles)}
+
+Constructs the 2-dimensional nerve of a covering `C`.
+
+Returns a NamedTuple with:
+- `graph::Graph`: nodes are covering elements; edges connect non-disjoint pairs.
+- `triangles::Vector{NTuple{3,Int}}`: triples `(i,j,k)` with `i<j<k` such that
+  `C[i] ∩ C[j] ∩ C[k]` is non-empty (Čech-style 2-simplex condition).
+
+# Example
+```julia
+C = [[1,2,3,4], [3,4,5], [4,5,6]]
+result = nerve_2d(C)
+result.graph       # Graph with 3 nodes, 3 edges
+result.triangles   # [(1,2,3)] — triple intersection {4} is non-empty
+```
+"""
+function nerve_2d(C::Vector)
+    n = length(C)
+    g = Graph(n)
+    triangles = NTuple{3,Int}[]
+    sets = [Set(c) for c in C]
+    for i in 1:n
+        for j in (i + 1):n
+            if !isdisjoint(sets[i], sets[j])
+                add_edge!(g, i, j)
+                for k in (j + 1):n
+                    if !isdisjoint(sets[j], sets[k]) &&
+                       any(x -> x in sets[j] && x in sets[k], C[i])
+                        push!(triangles, (i, j, k))
+                    end
+                end
+            end
+        end
+    end
+    return (graph = g, triangles = triangles)
+end
