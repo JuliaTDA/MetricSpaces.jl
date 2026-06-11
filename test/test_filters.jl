@@ -9,6 +9,43 @@
     @test eccentricity(X, Y) == pairwise_distance_summary(X, Y, dist_euclidean, mean)
 end
 
+@testset "eccentricity (per-point)" begin
+    # Three collinear points: 0, 1, 2
+    # ecc(0) = mean(|0-0|, |0-1|, |0-2|) = mean(0,1,2) = 1.0
+    # ecc(1) = mean(|1-0|, |1-1|, |1-2|) = mean(1,0,1) = 2/3
+    # ecc(2) = mean(|2-0|, |2-1|, |2-2|) = mean(2,1,0) = 1.0
+    X = [0.0, 1.0, 2.0]
+    ecc = eccentricity(X)
+
+    @test length(ecc) == length(X)
+    @test ecc ≈ [1.0, 2/3, 1.0]
+
+    # Centre point has the LOWEST eccentricity in the symmetric configuration
+    @test ecc[2] < ecc[1]
+    @test ecc[2] < ecc[3]
+
+    # One-argument form is equivalent to eccentricity(X, X)
+    @test eccentricity(X) == eccentricity(X, X)
+
+    # Custom distance keyword works (cityblock == euclidean for 1-D scalars)
+    ecc_cb = eccentricity(X; d=dist_cityblock)
+    @test ecc_cb ≈ ecc
+
+    # Output length matches number of points for a larger space
+    Z = collect(0.0:0.5:5.0)   # 11 points
+    @test length(eccentricity(Z)) == length(Z)
+
+    # Symmetric configuration in 2-D: vertices of an equilateral triangle
+    # All points should have equal eccentricity
+    p1 = [0.0, 0.0]
+    p2 = [1.0, 0.0]
+    p3 = [0.5, sqrt(3)/2]
+    T = [p1, p2, p3]
+    ecc_T = eccentricity(T)
+    @test length(ecc_T) == 3
+    @test ecc_T[1] ≈ ecc_T[2] ≈ ecc_T[3]
+end
+
 @testset "knn_density" begin
     # Two tight clusters: points near 0 and points near 10
     X = [0.0, 0.1, 0.2, 10.0, 10.1, 10.2]

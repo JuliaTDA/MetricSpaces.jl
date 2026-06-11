@@ -92,21 +92,62 @@ end
 """
     eccentricity(X::S, Y::S; d=dist_euclidean) where {S <: MetricSpace{T}}
 
-Computes the eccentricity of the metric space `X` with respect to the metric space `Y`. The eccentricity is defined as the mean of the pairwise distances between points in `X` and `Y`, using the provided distance function `d` (default is `dist_euclidean`).
+Computes the eccentricity of each point in metric space `X` with respect to the
+metric space `Y`. For each point `x` in `X`, the eccentricity is the mean distance
+from `x` to all points in `Y`, using the distance function `d`.
 
 # Arguments
 - `X::S`: A metric space of type `S` containing the points to compute eccentricity for.
-- `Y::S`: A metric space of type `S` containing the points to compute distances to.
+- `Y::S`: A metric space of type `S` containing the reference points.
 - `d`: A distance function to compute the distance between points in `X` and `Y`. Defaults to `dist_euclidean`.
 
 # Returns
-- A scalar value representing the eccentricity of `X` with respect to `Y`.
+- A `Vector{Float64}` of length `length(X)`, where the `i`-th entry is the mean
+  distance from `X[i]` to all points in `Y`.
 
 # Notes
-- This function internally uses `pairwise_distance_summary` with the `mean` function to compute the eccentricity.
+- This function internally uses `pairwise_distance_summary` with the `mean` function.
+- For a self-eccentricity filter suitable for use in Mapper, use the single-argument
+  form `eccentricity(X)`.
+
+See also: [`eccentricity(X)`](@ref).
 """
 function eccentricity(X::S, Y::S; d = dist_euclidean) where {S <: MetricSpace{T} where {T}}
     pairwise_distance_summary(X, Y, d, mean)
+end
+
+"""
+    eccentricity(X::S; d=dist_euclidean) where {S <: MetricSpace{T}}
+
+Computes the per-point eccentricity of each point in metric space `X` with respect
+to itself. For each point `x ∈ X`, the eccentricity is the mean distance from `x`
+to every point in `X`.
+
+This is a convenient Mapper filter function: points near the "centre" of the cloud
+receive low eccentricity values, while outliers receive high values.
+
+# Arguments
+- `X::S`: A metric space of type `S` containing the points to compute eccentricity for.
+- `d`: A distance function. Defaults to `dist_euclidean`.
+
+# Returns
+- A `Vector{Float64}` of length `length(X)`, where entry `i` is the mean distance
+  from `X[i]` to all points in `X`.
+
+# Notes
+- Equivalent to `eccentricity(X, X; d=d)`.
+- Time complexity is O(n²) in the number of points.
+
+# Example
+```julia
+X = [0.0, 1.0, 2.0]
+eccentricity(X)   # ≈ [1.0, 0.667, 1.0] — centre point has lowest eccentricity
+```
+
+See also: [`eccentricity(X, Y)`](@ref).
+"""
+function eccentricity(X::S; d = dist_euclidean) where {S <: MetricSpace{T} where {T}}
+    eccentricity(X, X; d = d)
 end
 
 
