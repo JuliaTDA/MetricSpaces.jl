@@ -6,7 +6,7 @@ using OhMyThreads
 using StatsBase: mean, median
 using ProgressMeter
 using StaticArrays
-using Graphs
+using Graphs: Graph, add_edge!
 
 export 
     mean;
