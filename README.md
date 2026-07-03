@@ -1,6 +1,6 @@
 # MetricSpaces.jl
 
-[![Build Status](https://github.com/vituri/MetricSpaces.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/vituri/MetricSpaces.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/JuliaTDA/MetricSpaces.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaTDA/MetricSpaces.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliatda.github.io/MetricSpaces.jl)
 
 A Julia package for working with metric spaces in Topological Data Analysis (TDA), providing efficient data structures and algorithms for metric space operations.
