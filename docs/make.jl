@@ -33,7 +33,7 @@ makedocs(;
 )
 
 if get(ENV, "CI", "false") == "true" || get(ENV, "JULIATDA_DOCS_DEPLOY", "false") == "true"
-    deploydocs(;
+    DocumenterVitepress.deploydocs(;
         repo = "github.com/JuliaTDA/MetricSpaces.jl",
         target = "build",
         branch = "gh-pages",
