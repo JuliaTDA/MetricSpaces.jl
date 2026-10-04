@@ -12,9 +12,9 @@ export default defineConfig({
   cleanUrls: true,
   outDir: 'REPLACE_ME_DOCUMENTER_VITEPRESS', // This is required for MarkdownVitepress to work correctly.
 
-  head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }]
-  ],
+  transformHead({ siteData }) {
+    return [['link', { rel: 'icon', href: `${siteData.base}favicon.ico` }]]
+  },
 
   markdown: {
     math: true,
