@@ -37,6 +37,8 @@ jobs:
       - uses: julia-actions/cache@v2
       # All dependencies are registered in General, so no `develop` step is
       # needed — the environment resolves straight from the registry.
+      - name: Resolve dependencies for this Julia version
+        run: julia --project=. -e 'using Pkg; rm("Manifest.toml"; force=true); Pkg.instantiate()'
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
