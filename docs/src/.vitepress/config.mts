@@ -7,7 +7,7 @@ import footnote from "markdown-it-footnote";
 export default defineConfig({
   base: 'REPLACE_ME_DOCUMENTER_VITEPRESS',
   title: 'MetricSpaces.jl',
-  description: "A Julia package for working with metric spaces",
+  description: "Geometry, neighborhoods, Euler transforms, and image filtrations in Julia",
   lastUpdated: true,
   cleanUrls: true,
   outDir: 'REPLACE_ME_DOCUMENTER_VITEPRESS', // This is required for MarkdownVitepress to work correctly.
@@ -58,6 +58,10 @@ export default defineConfig({
           { text: 'Sampling Methods', link: '/sampling' },
           { text: 'Neighborhood Analysis', link: '/neighborhoods' },
           { text: 'Datasets', link: '/datasets' },
+          { text: 'Transformations and Geodesics', link: '/transformations' },
+          { text: 'Nerves of Covers', link: '/nerves' },
+          { text: 'Euler Transforms and Images', link: '/euler_images' },
+          { text: 'Troubleshooting', link: '/troubleshooting' },
           { text: 'API Reference', link: '/api' }
         ]
       }

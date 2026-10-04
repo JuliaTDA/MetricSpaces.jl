@@ -2,7 +2,8 @@
 
 # metric spaces
 """ 
-The abstract Metric Space type is just an alias for Vector{T}.
+A collection of objects represented by `Vector{T}`. A distance is supplied
+separately to geometric operations.
 """
 MetricSpace{T} = Vector{T} where {T}
 
@@ -26,7 +27,7 @@ Constructs a `EuclideanSpace` object from a vector of vectors `X`, ensuring all 
 - An error if the inner vectors of `X` do not all have the same length.
 
 # Notes
-- Converts the input vectors to `SVector`s for internal consistency, then back to regular vectors for compatibility.
+- Stores each point as an `SVector`; use `as_matrix` for a coordinate matrix.
 """
 function EuclideanSpace(X::Vector{T}) where {T}
     sizes = length.(X)
@@ -68,7 +69,7 @@ end
 Convert an Euclidean space into a matrix.
 """
 function as_matrix(X::EuclideanSpace)
-    stack(X)
+    reduce(hcat, X)
 end
 
 # covering
@@ -84,4 +85,3 @@ A covering is interpreted as a vector of subsets of indexes
 of a given metric space `X`.
 """
 CoveringIndices = Vector{<:SubsetIndex}
-

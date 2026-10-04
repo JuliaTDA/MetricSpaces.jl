@@ -1,130 +1,43 @@
 # Mathematical Background
 
-This section provides the mathematical foundation for understanding metric spaces and the concepts implemented in MetricSpaces.jl.
+## Geometry begins with a choice of distance
 
-## Metric Spaces
+A metric is a function $d:X\times X\to\mathbb{R}_{\geq0}$ satisfying identity, symmetry, and the triangle inequality. Coordinate data often uses Euclidean distance,
 
-A **metric space** is a fundamental concept in mathematics that formalizes the notion of distance between elements in a set.
-
-### Definition
-
-A metric space is a pair $(X, d)$ where:
-- $X$ is a non-empty set (called the **underlying set**)
-- $d: X \times X \rightarrow \mathbb{R}_{\geq 0}$ is a function (called the **metric** or **distance function**)
-
-The metric $d$ must satisfy the following axioms for all $x, y, z \in X$:
-
-1. **Non-negativity**: $d(x, y) \geq 0$
-2. **Identity of indiscernibles**: $d(x, y) = 0$ if and only if $x = y$
-3. **Symmetry**: $d(x, y) = d(y, x)$
-4. **Triangle inequality**: $d(x, z) \leq d(x, y) + d(y, z)$
-
-### Common Distance Functions
-
-#### Euclidean Distance
-For points $x, y \in \mathbb{R}^n$:
 ```math
-d_2(x, y) = \sqrt{\sum_{i=1}^n (x_i - y_i)^2}
+d_2(x,y)=\sqrt{\sum_i(x_i-y_i)^2},
 ```
 
-#### Manhattan Distance (L¹ norm)
+but Manhattan and Chebyshev distances describe different notions of proximity. Changing units on one axis changes all three. Choosing and scaling features is therefore part of the model, not just a computational detail.
+
+The package does not check the metric axioms for arbitrary callables. Cosine and correlation dissimilarities are also available, although their mathematical properties and zero-vector behavior differ from a metric. Use a distance compatible with the operation you are applying.
+
+## Open balls, neighbors, and finite covers
+
+`ball_ids(X, x, ε)` represents $B_X(x,\varepsilon)=\{y\in X:d(x,y)<\varepsilon\}$. Its members are **observed points**, rather than all points of an ambient space. A covering is a list of index subsets; a point may occur in more than one subset.
+
+`epsilon_net` greedily selects uncovered points and covers their open balls. Every observation is eventually covered. Selected centers are separated by at least the radius, but the number of centers depends on observation order. Farthest-point sampling instead adds the point maximizing its minimum distance to existing centers; a fixed count does not promise coverage at a given radius.
+
+Nearest-neighbor queries in MetricSpaces include self when the query belongs to the reference collection. For self-queries, `k=1` can therefore give a zero score. Some higher-level density helpers explicitly compensate for this; read their conventions before comparing them.
+
+## Distance-to-measure conventions
+
+For an empirical reference collection with sorted nearest distances $r_1(x),\ldots,r_k(x)$, a common DTM is
+
 ```math
-d_1(x, y) = \sum_{i=1}^n |x_i - y_i|
+\left(\frac1k\sum_{j=1}^k r_j(x)^2\right)^{1/2}.
 ```
 
-#### Chebyshev Distance (L∞ norm)
-```math
-d_\infty(x, y) = \max_{1 \leq i \leq n} |x_i - y_i|
-```
+`distance_to_measure` is a general nearest-distance summary. Its default is $r_k(x)$, and `summary_function` selects alternatives, including the RMS above. The interface uses a neighbor count `k`; it does not take a probability mass parameter. Counts larger than the reference size are truncated.
 
-## Metric Balls
+Mean eccentricity averages distances to a reference cloud. It measures global centrality, while nearest-neighbor summaries emphasize local density. A distant but densely sampled component may have high eccentricity and low nearest-neighbor distance at the same time.
 
-### Open Balls
-Given a metric space $(X, d)$, a point $x \in X$, and a radius $r > 0$, the **open ball** centered at $x$ with radius $r$ is:
-```math
-B(x, r) = \{y \in X : d(x, y) < r\}
-```
+## Nerves and graph cycles
 
-### Closed Balls
-The **closed ball** is defined as:
-```math
-\overline{B}(x, r) = \{y \in X : d(x, y) \leq r\}
-```
+The nerve of a cover has a simplex whenever the corresponding subsets share a common member. Its graph records pairwise intersections. A triangle in that graph need not have a common member in all three subsets. `nerve_2d` tests triple intersections explicitly.
 
-### Properties
-- Open balls are the basis for the topology of metric spaces
-- Every point in a metric space has a neighborhood system given by open balls
-- Balls can be empty, finite, or infinite depending on the underlying space
+Ball-cover nerves and Vietoris–Rips complexes are different constructions: a Rips simplex tests pairwise distances, while a cover nerve tests common intersection. A loop in a graph summary alone is not a proof of a loop in an underlying sampled space. Nerve-theorem conclusions require additional hypotheses on the cover and the space.
 
-## Covering Theory
+## Euler characteristic
 
-### ε-nets
-An **ε-net** for a metric space $(X, d)$ is a subset $L \subseteq X$ such that:
-```math
-X \subseteq \bigcup_{x \in L} B(x, \varepsilon)
-```
-
-In other words, every point in $X$ is within distance $ε$ of some point in $L$.
-
-#### Properties of ε-nets:
-- **Covering property**: Every point is covered by at least one ε-ball
-- **Efficiency**: ε-nets provide sparse representations of dense point sets
-- **Approximation**: ε-nets preserve geometric properties up to scale ε
-
-### Farthest Point Sampling
-Farthest point sampling is a greedy algorithm that constructs a sequence of points where each new point is as far as possible from all previously selected points.
-
-**Algorithm**:
-1. Start with an arbitrary point $x_1 \in X$
-2. For $k = 2, 3, \ldots$, choose $x_k$ such that:
-   ```math
-   x_k = \arg\max_{x \in X} \min_{1 \leq i \leq k-1} d(x, x_i)
-   ```
-
-This method produces well-separated point sets that are useful for:
-- Geometric approximation
-- Landmark selection
-- Sparse representations
-
-## Neighborhoods and Local Structure
-
-### k-Neighborhoods
-For a point $x \in X$, the **k-neighborhood** consists of the $k$ nearest points to $x$:
-```math
-N_k(x) = \{y_1, y_2, \ldots, y_k\}
-```
-where $d(x, y_1) \leq d(x, y_2) \leq \cdots \leq d(x, y_k)$ and $y_i \neq x$.
-
-### Local Density and Filtering
-The **distance to measure** for a point $x$ with respect to a measure $\mu$ and parameter $m$ is:
-```math
-d_{\mu,m}(x) = \inf\{r > 0 : \mu(B(x, r)) \geq m\}
-```
-
-This concept is used in:
-- Outlier detection
-- Density-based clustering
-- Topological data analysis
-
-## Applications in Topological Data Analysis
-
-### Nerve Complexes
-Given a covering $\mathcal{U} = \{U_\alpha\}$ of a space $X$, the **nerve** is a simplicial complex where:
-- Vertices correspond to sets in the covering
-- A $k$-simplex is formed by $(k+1)$ sets with non-empty intersection
-
-### Persistent Homology
-Metric spaces provide the foundation for persistent homology by:
-- Defining filtrations through distance-based constructions
-- Creating Vietoris-Rips complexes from metric data
-- Analyzing topological features across scales
-
-## Implementation Notes
-
-MetricSpaces.jl implements these concepts with:
-- **Efficient data structures** for large-scale metric spaces
-- **Optimized algorithms** for common operations
-- **Flexible distance functions** supporting custom metrics
-- **Progress tracking** for long-running computations
-
-The package is designed to handle both theoretical exploration and practical applications in data analysis and computational topology.
+For a finite cell complex, $\chi=\sum_k(-1)^k n_k$, where $n_k$ counts cells of dimension $k$. In a planar shape, this is components minus holes. Euler curves evaluate $\chi$ throughout a filtration; an Euler transform repeats this in several directions. These summaries combine homological dimensions, so different shapes may share an Euler curve. See [Euler transforms and image filtrations](@ref) for the cell convention and comparison requirements.

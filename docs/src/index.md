@@ -1,77 +1,33 @@
 # MetricSpaces.jl
 
-A Julia package for working with metric spaces in Topological Data Analysis (TDA), providing efficient data structures and algorithms for metric space operations.
+MetricSpaces provides the geometry layer of JuliaTDA: represent observations, choose a distance, ask which observations are nearby, and build small summaries that retain their relationships. It also provides Euler characteristic transforms and binary-image filtrations.
 
-## Overview
+A point can be a numerical coordinate vector or an object such as a string. The distance is passed to an operation; it is not stored in the point cloud. This makes it easy to compare the same observations using different geometries.
 
-MetricSpaces.jl provides a comprehensive toolkit for working with metric spaces, including:
+## A small cloud, three useful questions
 
-- **Core Types**: Flexible metric space representations optimized for performance
-- **Distance Functions**: Multiple distance metrics (Euclidean, Manhattan, Chebyshev) with custom function support
-- **Metric Balls**: Efficient neighborhood queries for point clouds
-- **Sampling Methods**: Epsilon-nets, farthest point sampling, and random sampling algorithms
-- **Datasets**: Built-in geometric dataset generators (spheres, tori, cubes)
-- **Analysis Tools**: Neighborhood analysis, filtering, and nerve computations
-
-## Installation
-
-```julia
-using Pkg
-Pkg.add("MetricSpaces")
-```
-
-## Quick Start
-
-```julia
+```@example metric_home
 using MetricSpaces
-
-# Create a metric space from 2D points
-points = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [1.1, 2.1]]
-X = EuclideanSpace(points)
-
-# Find points within distance 1.0 of the first point
-nearby_indices = ball_ids(X, X[1], 1.0)
-
-# Compute pairwise distances
-distances = pairwise_distance(X, X, dist_euclidean)
-
-# Generate a sphere dataset
-S = sphere(1000, dim=3)
-
-# Sample landmarks using farthest point sampling
-landmarks = farthest_points_sample(S, 100)
+X = EuclideanSpace([[0.0, 0.0], [0.2, 0.0], [0.4, 0.0], [3.0, 0.0]])
+nearby = ball_ids(X, X[1], 0.3)
+landmarks = epsilon_net(X, 0.5)
+outlier_scores = distance_to_measure(X, X; k=3)
+(; nearby, landmarks, outlier_scores)
 ```
 
-## Key Features
+The first query finds a local neighborhood. The second returns indices of landmarks whose open balls cover the cloud. The third assigns large values to observations far from their nearest neighbors. These are building blocks for Mapper, clustering, and exploratory analysis; the package does not decide which geometry is scientifically appropriate for your data.
 
-### Efficient Algorithms
+## Where to begin
 
-Optimized implementations of fundamental metric space operations with multi-threading support and progress tracking for large datasets.
+| Your goal | Start here |
+|---|---|
+| Install the package and learn the data layout | [Getting Started](@ref) |
+| Understand the mathematical conventions | [Mathematical Background](@ref) |
+| Query neighbors or score unusual observations | [Neighborhoods and filters](@ref) |
+| Select representative observations | [Sampling Methods](@ref) |
+| Preprocess coordinates or follow a curved manifold | [Transformations and geodesic distances](@ref) |
+| Connect overlapping subsets | [Nerves of covers](@ref) |
+| Create example shapes | [Datasets](@ref) |
+| Analyze binary images or Euler transforms | [Euler transforms and image filtrations](@ref) |
 
-### Rich Dataset Support
-
-Built-in generators for common geometric datasets used in TDA research and education, including spheres, tori, and cubes with configurable parameters.
-
-### Flexible Distance Functions
-
-Support for multiple distance metrics with easy extensibility for custom distance functions. Compatible with the Distances.jl ecosystem.
-
-### Analysis Tools
-
-Comprehensive tools for neighborhood analysis, distance-to-measure computations, eccentricity calculations, and nerve complex construction.
-
-## Mathematical Foundation
-
-This package is built on solid mathematical foundations from metric geometry and topological data analysis. The core concepts include:
-
-- **Metric Spaces**: Sets equipped with distance functions satisfying the metric axioms (non-negativity, identity, symmetry, triangle inequality)
-- **Metric Balls**: Open balls B(x, r) = {y : d(x,y) < r} as fundamental neighborhoods
-- **Covering Properties**: Epsilon-nets and geometric covering constructions
-- **Sampling Theory**: Farthest point sampling for landmark selection
-
-## Documentation Structure
-
-- **[Getting Started](@ref)**: Practical tutorial with examples
-- **[Mathematical Background](@ref)**: Theoretical foundations
-- **Reference**: Detailed documentation for each module
-- **[API Reference](@ref)**: Complete function and type reference
+The [API Reference](@ref) collects docstrings. Each guide supplies context, examples, and limits that a signature alone cannot communicate.

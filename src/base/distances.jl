@@ -76,7 +76,7 @@ function pairwise_distance(
 
     (m == 0 || n == 0) && return s
 
-    N2 = stack(N)
+    N2 = reduce(hcat, N)
 
     p = Progress(m; enabled=show_progress)
 

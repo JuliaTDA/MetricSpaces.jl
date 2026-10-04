@@ -2,10 +2,10 @@ module MetricSpaces
 
 using Distances
 using Base.Threads
-using OhMyThreads
 using StatsBase: mean, median
 using ProgressMeter
 using StaticArrays
+import Random
 using Graphs: Graph, add_edge!
 
 export 
@@ -91,5 +91,14 @@ export
 
 include("extra/geodesic.jl");
 export geodesic_distance;
+
+include("extra/images.jl")
+export ImageFiltration, height_filtration, radial_filtration, dilation_filtration,
+    erosion_filtration, signed_distance_filtration, euclidean_distance_transform,
+    image_filtration_model
+
+include("extra/euler.jl")
+export EulerCurve, EulerTransform, SmoothEulerTransform, cubical_ecc,
+    sample_directions, ect, sect, euler_table
 
 end

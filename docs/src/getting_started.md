@@ -1,230 +1,87 @@
 # Getting Started
 
-This guide will walk you through the basic usage of MetricSpaces.jl with practical examples.
+## Install a source checkout
 
-## Installation
-
-First, install the package:
+The packages are developed together and may not be available in the General registry. Use a source checkout so the examples run against the version you are reading. From the directory containing `MetricSpaces.jl`, start Julia and run:
 
 ```julia
 using Pkg
-Pkg.add("MetricSpaces")
+Pkg.activate("metric-tutorial"; shared=false)
+Pkg.develop(path="MetricSpaces.jl")
+Pkg.instantiate()
 ```
 
-Then load it:
+For a standalone environment, `Pkg.add(url="https://github.com/JuliaTDA/MetricSpaces.jl")` installs the repository version. The package supports Julia 1.8 and later; optional package extensions require Julia 1.9 or later. Keep the project's `Manifest.toml` if you need the same dependency versions later.
 
-```julia
-using MetricSpaces
+## One observation per vector, one observation per matrix column
+
+Suppose four observations have two coordinates:
+
+```@example metric_intro
+using MetricSpaces, Random
+X = EuclideanSpace([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [4.0, 1.0]])
+A = as_matrix(X)
+@assert size(A) == (2, 4)
+@assert EuclideanSpace(A) == X
+(; first_point=X[1], dimensions=size(A))
 ```
 
-## Creating Metric Spaces
+`X[i]` is observation `i`. `A[:, i]` is the same observation in matrix form. If your table has observations in rows, use `EuclideanSpace(Matrix(permutedims(table_matrix)))`. Construct a nonempty collection with equal coordinate lengths. See [Core Types](@ref) for the underlying vector aliases.
 
-### From Point Collections
+## Distances and neighborhoods
 
-The most common way to create a metric space is from a collection of points:
-
-```julia
-# 2D points
-points_2d = [[1.0, 2.0], [3.0, 4.0], [5.0, 6.0], [1.1, 2.1], [3.2, 4.1]]
-X = EuclideanSpace(points_2d)
-
-println("Number of points: ", length(X))
-println("First point: ", X[1])
+```@example metric_intro
+D = pairwise_distance(X, X, dist_euclidean)
+ids = ball_ids(X, X[1], 1.1)
+points = ball(X, X[1], 1.1)
+nearest_ids = MetricSpaces.k_neighbors_ids(X, X[1], 2)
+@assert points == X[ids]
+(; distances_from_first=D[1, :], ids, nearest_ids)
 ```
 
-```julia
-# 3D points
-points_3d = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [0.5, 1.5, 2.5]]
-Y = EuclideanSpace(points_3d)
+`D[i, j]` compares `X[i]` with `X[j]`. Balls use **strict** inequality: a point exactly at the radius is excluded. Nearest-neighbor queries include the query point when it belongs to `X`, so the first neighbor here is the point itself. `k_neighbors` returns points; the qualified `MetricSpaces.k_neighbors_ids` returns indices.
+
+## Landmarks and a cover
+
+```@example metric_intro
+landmark_ids = epsilon_net(X, 1.1)
+cover = [ball_ids(X, X[i], 1.1) for i in landmark_ids]
+@assert sort(unique(vcat(cover...))) == collect(eachindex(X))
+Random.seed!(19)
+fps_ids = farthest_points_sample_ids(X, 2)
+sampled_points = X[fps_ids]
+@assert length(sampled_points) == 2
+(; landmark_ids, cover, fps_ids)
 ```
 
-### Using Built-in Datasets
+Indices let you retain labels and measurements associated with each observation. `epsilon_net` chooses enough landmarks for a radius; farthest-point sampling chooses a requested number. `random_sample` returns sampled **points**, not indices. See [Sampling Methods](@ref) for their different guarantees.
 
-MetricSpaces.jl provides several built-in geometric datasets:
+## A scalar filter for each observation
 
-```julia
-# Generate points on a sphere
-sphere_points = sphere(100, 2)  # 100 points on a 2-sphere
-S = EuclideanSpace(sphere_points)
-
-# Generate points on a torus
-torus_points = torus(50)  # 50 points on a torus
-T = EuclideanSpace(torus_points)
-
-# Generate points in a cube
-cube_points = cube(75, 3)  # 75 points in a 3D cube
-C = EuclideanSpace(cube_points)
+```@example metric_intro
+scores = distance_to_measure(X, X; k=3)
+centrality = eccentricity(X)
+@assert length(scores) == length(X)
+(; scores, most_central=argmin(centrality))
 ```
 
-## Basic Operations
+The default score is the maximum of the nearest `k` distances, including self when the reference cloud is `X`. It is a nearest-neighbor radius, not the classical root-mean-square DTM unless you supply that summary yourself. Eccentricity here is the **mean** distance to the reference cloud. Both produce useful Mapper filters; their values have the units of your chosen distance.
 
-### Computing Distances
+## Generate a shape
 
-```julia
-# Distance between two specific points
-point1 = X[1]
-point2 = X[2]
-dist = dist_euclidean(point1, point2)
-println("Distance between points: ", dist)
+Dataset generators live in a separate module:
 
-# Using different distance functions
-dist_manhattan = dist_cityblock(point1, point2)
-dist_chebyshev = dist_chebyshev(point1, point2)
-
-println("Manhattan distance: ", dist_manhattan)
-println("Chebyshev distance: ", dist_chebyshev)
+```@example metric_shapes
+using MetricSpaces, Random
+using MetricSpaces.Datasets: sphere, torus
+Random.seed!(17)
+circle = sphere(40; dim=2)
+donut = torus(40; R=3.0, r=1.0)
+(; circle_points=length(circle), torus_dimension=length(donut[1]))
 ```
 
-### Pairwise Distance Matrices
+`dim=2` means coordinates in two dimensions: the unit circle is the sphere $S^1$. See [Datasets](@ref) for the sampling conventions and the full catalogue.
 
-```julia
-# Compute all pairwise distances
-distances = pairwise_distance(X)
-println("Distance matrix size: ", size(distances))
+## Continue the analysis
 
-# Get summary statistics
-summary = pairwise_distance_summary(X)
-println("Distance summary: ", summary)
-```
-
-## Working with Metric Balls
-
-### Finding Neighborhoods
-
-```julia
-# Find all points within distance 1.5 of the first point
-center = X[1]
-radius = 1.5
-nearby_ids = ball_ids(X, center, radius)
-println("Points within radius $radius: ", nearby_ids)
-
-# Get the actual points in the ball
-nearby_points = ball(X, center, radius)
-println("Number of nearby points: ", length(nearby_points))
-```
-
-### k-Nearest Neighbors
-
-```julia
-# Find the 3 nearest neighbors of the first point
-k = 3
-neighbors = k_neighbors(X, X[1], k)
-println("$k nearest neighbors: ", neighbors)
-```
-
-## Sampling Methods
-
-### ε-net Construction
-
-An ε-net provides a sparse covering of the metric space:
-
-```julia
-# Create an ε-net with radius 2.0
-epsilon = 2.0
-landmarks = epsilon_net(X, epsilon)
-println("ε-net landmarks: ", landmarks)
-println("Number of landmarks: ", length(landmarks))
-
-# Extract the landmark points
-landmark_points = X[landmarks]
-```
-
-### Farthest Point Sampling
-
-Generate well-separated points using farthest point sampling:
-
-```julia
-# Sample 5 points using farthest point sampling
-num_samples = 5
-fps_indices = farthest_points_sample(X, num_samples)
-println("Farthest point sample indices: ", fps_indices)
-
-# Get the sampled points
-sampled_points = X[fps_indices]
-```
-
-### Random Sampling
-
-```julia
-# Random sample of 10 points
-random_indices = random_sample(X, 10)
-random_points = X[random_indices]
-```
-
-## Analysis and Filtering
-
-### Distance to Measure
-
-Compute density-based measures for outlier detection:
-
-```julia
-# Compute distance to measure for each point
-measure_distances = distance_to_measure(X, 0.1)  # 10% mass parameter
-println("Distance to measure: ", measure_distances[1:5])  # First 5 values
-```
-
-### Eccentricity
-
-Measure how "central" each point is:
-
-```julia
-# Compute eccentricity for each point
-eccentricities = eccentricity(X, X)
-println("Eccentricities: ", eccentricities[1:5])  # First 5 values
-
-# Find the most central point (minimum eccentricity)
-most_central_idx = argmin(eccentricities)
-println("Most central point index: ", most_central_idx)
-```
-
-## Working with Different Distance Functions
-
-You can use different distance functions throughout the package:
-
-```julia
-# Using Manhattan distance for ball queries
-manhattan_ball = ball_ids(X, center, radius, dist_cityblock)
-
-# Using Chebyshev distance for ε-net
-chebyshev_net = epsilon_net(X, epsilon, d=dist_chebyshev)
-
-# Custom distance function
-function custom_distance(x, y)
-    # Example: weighted Euclidean distance
-    weights = [2.0, 1.0]  # Different weights for each dimension
-    return sqrt(sum(weights .* (x .- y).^2))
-end
-
-# Use custom distance (where supported)
-custom_ball = ball_ids(X, center, radius, custom_distance)
-```
-
-## Performance Tips
-
-### Working with Large Datasets
-
-```julia
-# For large datasets, use progress tracking
-large_points = sphere(10000, 3)  # 10,000 points on a 3-sphere
-L = EuclideanSpace(large_points)
-
-# Operations will show progress bars automatically
-large_epsilon_net = epsilon_net(L, 0.5)
-```
-
-### Memory Efficiency
-
-```julia
-# For memory efficiency with large distance matrices,
-# compute distances on-demand rather than storing the full matrix
-function compute_distance_on_demand(X, i, j)
-    return dist_euclidean(X[i], X[j])
-end
-```
-
-## Next Steps
-
-- Learn about the core types for more advanced metric space constructions
-- Explore distance functions for custom distance implementations
-- Check out sampling methods for advanced sampling algorithms
-- See the datasets section for more built-in geometric datasets
+Use [Neighborhoods and filters](@ref) to study density, [Nerves of covers](@ref) to summarize overlaps, or [Euler transforms and image filtrations](@ref) for images. For Mapper graphs, load TDAmapper; for persistent homology, use JuliaTDA's persistence packages. MetricSpaces supplies their geometric input.

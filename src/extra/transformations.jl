@@ -60,7 +60,7 @@ Returns a new MetricSpace with the same per-point dimension.
 function standardize(X::EuclideanSpace{N,T}) where {N,T}
     c = sum(X) ./ length(X)
     Y = [x - c for x in X]
-    M = stack(Y)
+    M = reduce(hcat, Y)
     σ = [Statistics.std(@view M[i, :]) for i in 1:N]
     σ_safe = [s == 0 ? one(T) : T(s) for s in σ]
     return [y ./ σ_safe for y in Y]

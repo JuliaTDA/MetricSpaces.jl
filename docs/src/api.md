@@ -1,73 +1,118 @@
 # API Reference
 
-Complete reference for all exported functions and types in MetricSpaces.jl.
+The guides explain conventions and show executable examples. This page collects public docstrings by task. Distance wrapper names and normalization helpers are explained in [Distance Functions](@ref) and [Transformations and geodesic distances](@ref).
 
-## Core Types
+## Core types and intervals
 
-```@docs
-MetricSpace
-EuclideanSpace
-as_matrix
-SubsetIndex
-CoveringIndices
-Interval
-IntervalCovering
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["types.jl", "real.jl"]
+Public = true
+Private = false
 ```
 
-## Distance Functions
+## Distance matrices and norms
 
-```@docs
-pairwise_distance
-pairwise_distance_summary
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["distances.jl", "norm.jl"]
+Public = true
+Private = false
 ```
 
-## Norm Functions
+## Balls and nearest neighbors
 
-```@docs
-norm
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["ball.jl", "neighborhood.jl"]
+Public = true
+Private = false
 ```
 
-## Ball Operations
+The index-returning helper is available with its module qualifier:
 
 ```@docs
-ball
-ball_ids
+MetricSpaces.k_neighbors_ids
 ```
 
-## Neighborhood Analysis
+## Filters and density scores
 
-```@docs
-k_neighbors
-k_neighbors_ids
-distance_to_measure
-eccentricity
-is_not_disjoint
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["filters.jl"]
+Public = true
+Private = false
 ```
 
-## Sampling Methods
+## Landmark and random sampling
 
-```@docs
-epsilon_net
-farthest_points_sample_ids
-farthest_points_sample
-random_sample
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["sampling.jl"]
+Public = true
+Private = false
 ```
 
-## Dataset Generation
+## Coordinate transformations
 
-```@docs
-sphere
-torus
-cube
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["transformations.jl"]
+Public = true
+Private = false
 ```
 
-## Nerve Construction
+## Geodesic distances
 
-```@docs
-nerve_1d
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["geodesic.jl"]
+Public = true
+Private = false
 ```
 
-## Index
+## Cover nerves
 
-```@index
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["nerve.jl"]
+Public = true
+Private = false
+```
+
+## Binary-image filtrations
+
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["images.jl"]
+Public = true
+Private = false
+```
+
+## Euler curves and transforms
+
+```@autodocs
+Modules = [MetricSpaces]
+Order = [:type, :constant, :function]
+Pages = ["euler.jl"]
+Public = true
+Private = false
+```
+
+## Dataset generators
+
+```@autodocs
+Modules = [MetricSpaces.Datasets]
+Order = [:function]
+Public = true
+Private = false
 ```

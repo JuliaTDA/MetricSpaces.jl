@@ -1,7 +1,8 @@
 """
     sphere(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1)
 
-Generate points uniformly distributed on the surface of a sphere.
+Generate points on a sphere by normalizing vectors sampled in a centered cube.
+The radius is fixed, but directions are not uniformly distributed on the sphere.
 """
 function sphere(num_points::Integer=100; dim::Integer=2, radius::Number=1)
     X = EuclideanSpace(rand(dim, num_points) .- 0.5)
@@ -11,7 +12,10 @@ end
 """
     cube(num_points::Integer = 100; dim::Integer = 2, radius::Number = 1, noise::Function = zeros)
 
-Generate points uniformly distributed on the surface of a hypercube.
+Generate normalized centered-cube samples, scaled by `radius`, with optional noise.
+The current implementation uses Euclidean normalization: without noise, points lie
+on a sphere, not on a hypercube. For uniform cube-interior points use
+`EuclideanSpace(rand(dim, num_points))`.
 """
 function cube(num_points::Integer=100; dim::Integer=2, radius::Number=1, noise::Function=zeros)
     X = rand(dim, num_points) .- 0.5
@@ -29,7 +33,8 @@ end
 """
     torus(num_points::Integer = 100; r::Number = 1, R::Number = 3)
 
-Generate points uniformly distributed on a torus in 3D.
+Generate points on a torus in 3D by sampling both angles uniformly.
+This is not uniform surface-area sampling.
 
 # Arguments
 - `r`: inner radius (tube radius)
