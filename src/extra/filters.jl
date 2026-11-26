@@ -45,7 +45,7 @@ function distance_to_measure(
             s[i] = _k_neighbors_summary(X[i], Y, d, k_eff, summary_function)
         end
     else
-        tforeach(1:m; scheduler=:dynamic) do i
+        Threads.@threads for i in 1:m
             @inbounds s[i] = _k_neighbors_summary(X[i], Y, d, k_eff, summary_function)
         end
     end
@@ -293,7 +293,7 @@ function kde(
             densities[i] = s / n
         end
     else
-        tforeach(1:m; scheduler=:dynamic) do i
+        Threads.@threads for i in 1:m
             s = 0.0
             @inbounds for j in 1:n
                 s += kernel(d(Y[i], X[j]) / bandwidth)

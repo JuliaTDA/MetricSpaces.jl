@@ -28,7 +28,7 @@ k_neighbors_ids = function (X::MetricSpace{T}, x::T, k::Int, d=dist_euclidean) w
             dists[i] = d(x, X[i])
         end
     else
-        tforeach(1:m; scheduler=:dynamic) do i
+        Threads.@threads for i in 1:m
             @inbounds dists[i] = d(x, X[i])
         end
     end

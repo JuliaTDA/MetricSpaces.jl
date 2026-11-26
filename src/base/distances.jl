@@ -36,7 +36,7 @@ function pairwise_distance(
             next!(p)
         end
     else
-        tforeach(1:m; scheduler=:dynamic) do i
+        Threads.@threads for i in 1:m
             x = @inbounds M[i]
             @inbounds for j ∈ 1:n
                 s[i, j] = d(x, N[j])
@@ -86,7 +86,7 @@ function pairwise_distance(
             next!(p)
         end
     else
-        tforeach(1:m; scheduler=:dynamic) do i
+        Threads.@threads for i in 1:m
             x = @inbounds M[i]
             colwise!(d, @view(s[i, :]), x, N2)
             next!(p)
@@ -145,7 +145,7 @@ function pairwise_distance_summary(
                 next!(p)
             end
         else
-            tforeach(1:m; scheduler=:dynamic) do i
+            Threads.@threads for i in 1:m
                 x = @inbounds M[i]
                 acc = 0.0
                 @inbounds for j ∈ 1:n
@@ -167,7 +167,7 @@ function pairwise_distance_summary(
                 next!(p)
             end
         else
-            tforeach(1:m; scheduler=:dynamic) do i
+            Threads.@threads for i in 1:m
                 x = @inbounds M[i]
                 vals = Vector{Float64}(undef, n)
                 @inbounds for j ∈ 1:n

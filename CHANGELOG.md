@@ -4,6 +4,8 @@ Notable changes to MetricSpaces are recorded here.
 
 ## Unreleased
 
+- Restore multithreaded distance, neighborhood, and density calculations using Julia's thread scheduler.
+
 - Add vertex-cubical ECC, simplicial/cubical ECT, exact centered SECT integrals,
   direction sampling and stable-order Euler tables.
 - Add exact anisotropic Euclidean distance transforms and binary-image height,
